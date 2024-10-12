@@ -1,21 +1,17 @@
-package com.example.trackcap.ui.gastos.view
+package com.example.trackcap.ui.charts.view
 
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
 @Composable
@@ -23,26 +19,25 @@ fun PieChartView(data: List<Pair<String, Float>>) {
     val context = LocalContext.current
 
     AndroidView(
-        factory = {PieChart(context).apply {
-            description.isEnabled = false
-            setUsePercentValues(true)
-            setEntryLabelTextSize(12f)
-            setEntryLabelColor(Color.Black.toArgb())
-            centerText = "Gastos por Categoría"
-            setCenterTextSize(24f)
-            isDrawHoleEnabled = true
-            holeRadius = 0f
-            transparentCircleRadius = 0f
-            setDrawCenterText(true)
-            legend.isEnabled = true
-            // ... otras configuraciones del gráfico ...
-        }
+        factory = { context ->
+            PieChart(context).apply {
+                isDrawHoleEnabled = true // Habilita el agujero central
+                holeRadius = 50f // Ajusta el radio del agujero (en porcentaje del radio del gráfico)
+                description.isEnabled = false // Deshabilita la descripción
+                legend.isEnabled = false // Deshabilita la leyenda
+                legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.CENTER
+                setUsePercentValues(true)
+            }
         },
         update = { pieChart ->
             val entries = data.map { PieEntry(it.second, it.first) }
-            val dataSet = PieDataSet(entries, "Categorías").apply {
+            val dataSet = PieDataSet(entries, "Categories").apply {
                 colors = ColorTemplate.MATERIAL_COLORS.toList()
-                // ... otras configuraciones del dataSet ...
+                valueFormatter = PercentFormatter()
+                xValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
+                yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
+
+                valueTextSize = 15f
             }
 
             val pieData = PieData(dataSet)
@@ -62,6 +57,8 @@ fun PieChartPreview() {
         "Comida" to 100f,
         "Transporte" to 200f,
         "Entretenimiento" to 150f,
+        "Salud" to 75f,
+        "Educación" to 80f,
         "Otros" to 50f
     )
     PieChartView(data)
