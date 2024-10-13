@@ -19,13 +19,14 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun tempSelector(
+fun listSelector(
     modifier: Modifier = Modifier,
-    onTemporalidadSelected: (String) -> Unit
+    label: String,
+    options: List<String>,
+    onSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     val selectedOptionText = remember { mutableStateOf("Día") }
-    val options = listOf("Día", "Semana", "Mes", "Año")
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -36,7 +37,7 @@ fun tempSelector(
         OutlinedTextField(
             value = selectedOptionText.value,
             onValueChange = {}, // No permitimos edición
-            label = { Text("Temporalidad") },
+            label = { Text(label) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
@@ -57,7 +58,7 @@ fun tempSelector(
                     onClick = {
                         selectedOptionText.value = selectionOption
                         expanded = false
-                        onTemporalidadSelected(selectionOption)
+                        onSelected(selectionOption)
                     }
                 )
             }
@@ -68,6 +69,8 @@ fun tempSelector(
 
 @Preview(showBackground = true)
 @Composable
-fun tempSelectorPreview() {
-    tempSelector(onTemporalidadSelected = {})
+fun listSelectorPreview() {
+    val options = listOf("Día", "Semana", "Mes", "Año", "Decada")
+    val label = "Temporalidad"
+    listSelector(onSelected = {}, options = options, label = label)
 }
