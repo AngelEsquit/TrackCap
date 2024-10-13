@@ -17,7 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalMaterial3Api::class) // Asegúrate de usar la API experimental
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun tempSelector(
     modifier: Modifier = Modifier,
