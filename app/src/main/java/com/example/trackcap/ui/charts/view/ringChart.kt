@@ -15,7 +15,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
 @Composable
-fun PieChartView(data: List<Pair<String, Float>>) {
+fun ringChart(data: List<Pair<String, Float>>) {
     val context = LocalContext.current
 
     AndroidView(
@@ -52,7 +52,7 @@ fun PieChartView(data: List<Pair<String, Float>>) {
 
 @Preview(showBackground = true)
 @Composable
-fun PieChartPreview() {
+fun ringChartPreview() {
     val data = listOf(
         "Comida" to 100f,
         "Transporte" to 200f,
@@ -61,5 +61,5 @@ fun PieChartPreview() {
         "Educación" to 80f,
         "Otros" to 50f
     )
-    PieChartView(data)
+    ringChart(data)
 }
