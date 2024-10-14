@@ -9,11 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.trackcap.navigation.NavigationState
+import com.example.trackcap.navigation.navigateTo
 
 @Composable
-fun floatingBotton() {
+fun floatingBotton(navController: NavController, route: NavigationState) {
     FloatingActionButton(
-        onClick = { /* Acción al hacer clic en el botón */ },
+        onClick = { navigateTo(navController, route.route) },
         modifier = Modifier
             .padding(16.dp) // Padding alrededor del botón
         // .offset(x = 16.dp, y = (-16).dp) // Ajustar la posición si es necesario
@@ -30,5 +34,7 @@ fun floatingBotton() {
 @Preview(showBackground = true)
 @Composable
 fun floatingBottonPreview() {
-    floatingBotton()
+    val navController = rememberNavController()
+    val route = NavigationState.Home
+    floatingBotton(navController, route)
 }
