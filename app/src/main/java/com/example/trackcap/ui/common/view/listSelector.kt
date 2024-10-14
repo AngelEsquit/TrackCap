@@ -26,7 +26,7 @@ fun listSelector(
     onSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedOptionText = remember { mutableStateOf("Día") }
+    val selectedOptionText = remember { mutableStateOf("") }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
