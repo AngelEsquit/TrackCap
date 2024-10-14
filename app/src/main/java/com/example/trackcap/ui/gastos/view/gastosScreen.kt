@@ -3,7 +3,6 @@ package com.example.trackcap.ui.gastos.view
 import android.annotation.SuppressLint
 import android.content.ClipData.Item
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,9 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.AppBar
+import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.ui.charts.view.ringChart
 import com.example.trackcap.ui.common.view.floatingBotton
-import com.example.trackcap.ui.common.view.tempSelector
+import com.example.trackcap.ui.common.view.listSelector
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -45,7 +45,7 @@ fun gastosScreen(navController: NavController) {
 
     Scaffold (
         topBar = { AppBar(title = "Gastos", navController = navController) },
-        floatingActionButton = { floatingBotton() }
+        floatingActionButton = { floatingBotton(navController = navController, route = NavigationState.Add) }
     ) { innerPadding ->
         LazyColumn (
             contentPadding = innerPadding,
@@ -53,7 +53,8 @@ fun gastosScreen(navController: NavController) {
                 .padding(16.dp)
         ){
             item { // Temporalidad
-                tempSelector {}
+                val temporalidades = listOf("Día", "Semana", "Mes", "Año")
+                listSelector(label = "Temporalidad", options = temporalidades, onSelected = { })
             }
 
             item { // Gráfico
