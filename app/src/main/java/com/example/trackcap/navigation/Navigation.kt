@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.trackcap.ui.cards.view.cardsScreen
 import com.example.trackcap.ui.cards.view.homeScreen
 import com.example.trackcap.ui.common.view.addCatScreen
 import com.example.trackcap.ui.gastos.view.gastosScreen
@@ -32,6 +33,10 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
 
         composable(route = NavigationState.Ingresos.route) {
             ingresosScreen(navController = navController)
+        }
+
+        composable(route = NavigationState.Cards.route) {
+            cardsScreen(navController = navController)
         }
 
         composable(route = NavigationState.Add.route) {
