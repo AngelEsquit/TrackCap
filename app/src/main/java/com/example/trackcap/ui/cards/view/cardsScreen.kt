@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,6 +38,12 @@ fun cardsScreen(navController: NavController) {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
+            item {
+                Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+                    Text(text = "Agregar tarjeta")
+                }
+            }
+
             item {
                 cards.forEach { card ->
                     Card (modifier = Modifier
