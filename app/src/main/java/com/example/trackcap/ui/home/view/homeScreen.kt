@@ -1,6 +1,7 @@
 package com.example.trackcap.ui.cards.view
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,10 +33,12 @@ import com.example.trackcap.navigation.navigateTo
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun homeScreen(navController: NavController) {
+    val color1 = Color(0xFF26282E)
+    val color2 = Color(0xFF3A3D44)
     val saldo by remember { mutableStateOf(0.00) }
-    val movimientos = remember { mutableStateOf(listOf(Pair("Gasto 1", 10.00), Pair("Ingreso 1", 100.00), Pair("Gasto 2", 75.00))) }
+    val movimientos = remember { mutableStateOf(listOf(Triple("Gasto 1", 10.00, color1), Triple("Ingreso 1", 100.00, color2), Triple("Gasto 2", 75.00, color1))) }
     val activos = remember {
-        mutableStateOf(listOf(Pair("Activo 1", 100.00), Pair("Activo 2", 200.00), Pair("Activo 3", 150.00)))
+        mutableStateOf(listOf(Triple("Activo 1", 100.00, color1), Triple("Activo 2", 200.00, color2), Triple("Activo 3", 150.00, color1)))
     }
 
     Scaffold (topBar = { AppBar(title = "TrackCap", navController = navController) }
@@ -73,7 +77,9 @@ fun homeScreen(navController: NavController) {
                     .padding(horizontal = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Column {
-                        Row {
+                        Row (modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.Black)){
                             Text(text = "Movimiento",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
@@ -90,7 +96,9 @@ fun homeScreen(navController: NavController) {
 
 
                         movimientos.value.forEach() { movimiento ->
-                            Row {
+                            Row (modifier = Modifier
+                                .fillMaxWidth()
+                                .background(movimiento.third)){
                                 Text(
                                     text = movimiento.first,
                                     fontSize = 16.sp,
@@ -124,7 +132,9 @@ fun homeScreen(navController: NavController) {
                     .padding(horizontal = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Column {
-                        Row {
+                        Row (modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.Black)){
                             Text(text = "Activo",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
@@ -141,7 +151,9 @@ fun homeScreen(navController: NavController) {
 
 
                         activos.value.forEach() { activo ->
-                            Row {
+                            Row (modifier = Modifier
+                                .fillMaxWidth()
+                                .background(activo.third)){
                                 Text(
                                     text = activo.first,
                                     fontSize = 16.sp,
@@ -172,6 +184,14 @@ fun homeScreen(navController: NavController) {
                     Button(onClick = { navigateTo(navController, NavigationState.Gastos.route) },
                         modifier = Modifier.weight(1f)) {
                         Text(text = "Gastos")
+                    }
+                }
+
+                Row (modifier = Modifier.padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Button(onClick = { navigateTo(navController, NavigationState.Ingresos.route) },
+                        modifier = Modifier.weight(1f)) {
+                        Text(text = "Ingresos")
                     }
                     Button(onClick = { navigateTo(navController, NavigationState.Invest.route) },
                         modifier = Modifier.weight(1f)) {
