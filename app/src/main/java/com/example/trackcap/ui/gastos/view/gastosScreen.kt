@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +43,9 @@ fun gastosScreen(navController: NavController) {
     val categorias = listOf(Pair("Comida", 100f), Pair("Transporte", 200f),
         Pair("Entretenimiento", 150f), Pair("Salud", 75f),
         Pair("Educación", 50f), Pair("Otros", 25f))
+
+    val color = colorScheme.tertiaryContainer
+
 
     Scaffold (
         topBar = { AppBar(title = "Gastos", navController = navController) },
@@ -85,14 +89,21 @@ fun gastosScreen(navController: NavController) {
                             row.forEach { categoria ->
                                 Card (modifier = Modifier
                                     .weight(1f)
-                                    .height(40.dp) ) {
+                                    .height(40.dp)
+
+                                ) {
                                     Box (modifier = Modifier
+                                        .background(color = color)
                                         .padding(8.dp)
                                         .fillMaxSize()
-                                        .wrapContentSize(Alignment.Center)) {
+                                        .wrapContentSize(Alignment.Center)
+
+
+                                    ) {
                                         Text(text = categoria.first,
                                             overflow = TextOverflow.Ellipsis,
-                                            maxLines = 1)
+                                            maxLines = 1,
+                                            color = Color.Black)
                                     }
                                 }
                             }

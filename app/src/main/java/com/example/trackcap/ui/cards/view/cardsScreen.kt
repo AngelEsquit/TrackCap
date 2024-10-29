@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -27,6 +30,7 @@ fun cardsScreen(navController: NavController) {
         Triple("Tarjeta 2", "13/12/2024", 200),
         Triple("Tarjeta 3", "15/02/2025", 150),
     )
+    val color = colorScheme.tertiaryContainer
 
     val img = R.drawable.img_card
 
@@ -39,8 +43,12 @@ fun cardsScreen(navController: NavController) {
                 .padding(16.dp)
         ) {
             item {
-                Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "Agregar tarjeta")
+                Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = color
+                    )) {
+                    Text(text = "Agregar tarjeta",
+                        color = Color.Black)
                 }
             }
 

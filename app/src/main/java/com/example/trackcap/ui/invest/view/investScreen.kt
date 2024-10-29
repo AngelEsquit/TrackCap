@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,8 +32,11 @@ import com.example.trackcap.navigation.AppBar
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun investScreen(navController: NavController) {
-    val color1 = Color(0xFF26282E)
-    val color2 = Color(0xFF3A3D44)
+    val color0 = colorScheme.surfaceContainerLowest
+    val color1 = colorScheme.outlineVariant
+    val color2 = colorScheme.outline
+    val color3 = colorScheme.tertiaryContainer
+
     val saldo by remember { mutableStateOf(0.00) }
     val activos = remember {
         mutableStateOf(listOf(Triple("Activo 1", 100.00, color1), Triple("Activo 2", 200.00, color2),
@@ -45,8 +50,13 @@ fun investScreen(navController: NavController) {
             modifier = Modifier
                 .padding(16.dp)) {
             item {
-                Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "Agregar activo")
+                Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = color3
+                    )
+                ) {
+                    Text(text = "Agregar activo",
+                        color = Color.Black)
                 }
             }
 
@@ -82,7 +92,7 @@ fun investScreen(navController: NavController) {
                     Column {
                         Row (modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.Black)){
+                            .background(color0)){
                             Text(text = "Activo",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,

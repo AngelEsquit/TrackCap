@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,12 +31,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.AppBar
 import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.navigation.navigateTo
+import com.example.trackcap.ui.theme.TrackCapTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun homeScreen(navController: NavController) {
-    val color1 = Color(0xFF26282E)
-    val color2 = Color(0xFF3A3D44)
+    val color0 = colorScheme.surfaceContainerLowest
+    val color1 = colorScheme.outlineVariant
+    val color2 = colorScheme.outline
+    val color3 = colorScheme.tertiaryContainer
     val saldo by remember { mutableStateOf(0.00) }
     val movimientos = remember { mutableStateOf(listOf(Triple("Gasto 1", 10.00, color1), Triple("Ingreso 1", 100.00, color2), Triple("Gasto 2", 75.00, color1))) }
     val activos = remember {
@@ -79,7 +84,7 @@ fun homeScreen(navController: NavController) {
                     Column {
                         Row (modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.Black)){
+                            .background(color = color0)){
                             Text(text = "Movimiento",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
@@ -134,7 +139,7 @@ fun homeScreen(navController: NavController) {
                     Column {
                         Row (modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.Black)){
+                            .background(color = color0)){
                             Text(text = "Activo",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
@@ -178,24 +183,45 @@ fun homeScreen(navController: NavController) {
                 Row (modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween) {
                     Button(onClick = { navigateTo(navController, NavigationState.Cards.route) },
-                        modifier = Modifier.weight(1f)) {
-                        Text(text = "Tarjetas")
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                                containerColor = color3
+                                )
+                    ) {
+                        Text(text = "Tarjetas",
+                            color = Color.Black)
                     }
                     Button(onClick = { navigateTo(navController, NavigationState.Gastos.route) },
-                        modifier = Modifier.weight(1f)) {
-                        Text(text = "Gastos")
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = color3
+                        )
+                    ) {
+                        Text(text = "Gastos",
+                            color = Color.Black
+                        )
                     }
                 }
 
                 Row (modifier = Modifier.padding(horizontal = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween) {
                     Button(onClick = { navigateTo(navController, NavigationState.Ingresos.route) },
-                        modifier = Modifier.weight(1f)) {
-                        Text(text = "Ingresos")
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = color3
+                        )
+                    ) {
+                        Text(text = "Ingresos",
+                            color = Color.Black)
                     }
                     Button(onClick = { navigateTo(navController, NavigationState.Invest.route) },
-                        modifier = Modifier.weight(1f)) {
-                        Text(text = "Activos")
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = color3
+                        )
+                    ) {
+                        Text(text = "Activos",
+                            color = Color.Black)
                     }
                 }
             }
