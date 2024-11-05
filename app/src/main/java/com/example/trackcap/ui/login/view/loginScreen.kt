@@ -11,6 +11,8 @@ import  androidx.compose.ui.unit.dp
 import  androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.AppBar
+import com.example.trackcap.navigation.NavigationState
+import com.example.trackcap.navigation.navigateTo
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -23,7 +25,7 @@ fun loginScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Iniciar sesión")
+            Text(text = "Iniciar sesión", style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(24.dp))
             OutlinedTextField(
                 value = "",
@@ -37,7 +39,7 @@ fun loginScreen(navController: NavController) {
                 label = { Text("Contraseña") }
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = { navigateTo(navController, NavigationState.Home.route) }) {
                 Text("Iniciar sesión")
             }
         }

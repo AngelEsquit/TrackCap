@@ -12,11 +12,12 @@ import com.example.trackcap.ui.common.view.addCatScreen
 import com.example.trackcap.ui.gastos.view.gastosScreen
 import com.example.trackcap.ui.ingresos.view.ingresosScreen
 import com.example.trackcap.ui.invest.view.investScreen
+import com.example.trackcap.ui.login.view.loginScreen
 
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(navController = navController,
-        startDestination = NavigationState.Home.route,
+        startDestination = NavigationState.Login.route,
         modifier = modifier) {
 
         composable(route = NavigationState.Home.route) {
@@ -45,6 +46,10 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
 
         composable(route = NavigationState.Back.route) {
             navController.navigateUp()
+        }
+
+        composable(route = NavigationState.Login.route) {
+            loginScreen(navController = navController)
         }
     }
 }
