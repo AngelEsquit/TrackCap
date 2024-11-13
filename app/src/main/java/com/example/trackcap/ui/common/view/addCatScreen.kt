@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -17,19 +14,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.trackcap.navigation.AppBar
+import com.example.trackcap.navigation.AppBarBottom
+import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun addCatScreen(navController: NavController) {
-    Scaffold (topBar = { AppBar(title = "Agregar categoría", navController = navController) },
+    Scaffold (topBar = { AppBarTop(title = "Agregar categoría", navController = navController) },
+        bottomBar = { AppBarBottom(navController = navController) },
         floatingActionButton = { floatingBotton(navController, NavigationState.Back) }
     ) { innerPadding ->
         // Categoría

@@ -27,7 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.trackcap.navigation.AppBar
+import com.example.trackcap.navigation.AppBarBottom
+import com.example.trackcap.navigation.AppBarTop
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -44,7 +45,9 @@ fun investScreen(navController: NavController) {
             Triple("Activo 5", 75.00, color1)))
     }
 
-    Scaffold (topBar = { AppBar(title = "Activos", navController = navController) }
+    Scaffold (
+        topBar = { AppBarTop(title = "Activos", navController = navController) },
+        bottomBar = { AppBarBottom(navController = navController) }
     ) {  innerPadding ->
         LazyColumn (contentPadding = innerPadding,
             modifier = Modifier

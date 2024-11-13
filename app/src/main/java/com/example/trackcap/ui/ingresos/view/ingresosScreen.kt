@@ -21,10 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.PackageManagerCompat.UnusedAppRestrictionsStatus
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.trackcap.navigation.AppBar
+import com.example.trackcap.navigation.AppBarBottom
+import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.ui.charts.view.ringChart
 import com.example.trackcap.ui.common.view.floatingBotton
@@ -38,7 +38,8 @@ fun ingresosScreen(navController: NavController) {
         Pair("Inversiones", 50f), Pair("Otros", 25f))
 
     Scaffold (
-        topBar = { AppBar(title = "Ingresos", navController = navController) },
+        topBar = { AppBarTop(title = "Ingresos", navController = navController) },
+        bottomBar = { AppBarBottom(navController = navController) },
         floatingActionButton = { floatingBotton(navController = navController, route = NavigationState.Add) }
     ) { innerPadding ->
         LazyColumn (

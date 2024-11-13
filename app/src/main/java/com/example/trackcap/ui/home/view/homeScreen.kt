@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -28,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.trackcap.navigation.AppBar
+import com.example.trackcap.navigation.AppBarBottom
+import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.navigation.navigateTo
-import com.example.trackcap.ui.theme.TrackCapTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -46,7 +45,9 @@ fun homeScreen(navController: NavController) {
         mutableStateOf(listOf(Triple("Activo 1", 100.00, color1), Triple("Activo 2", 200.00, color2), Triple("Activo 3", 150.00, color1)))
     }
 
-    Scaffold (topBar = { AppBar(title = "TrackCap", navController = navController) }
+    Scaffold (
+        topBar = { AppBarTop(title = "TrackCap", navController = navController) },
+        bottomBar = { AppBarBottom(navController = navController) }
     ) { innerPadding ->
         LazyColumn (
             contentPadding = innerPadding
@@ -175,53 +176,6 @@ fun homeScreen(navController: NavController) {
                                 )
                             }
                         }
-                    }
-                }
-            }
-
-            item {
-                Row (modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                    Button(onClick = { navigateTo(navController, NavigationState.Cards.route) },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                                containerColor = color3
-                                )
-                    ) {
-                        Text(text = "Tarjetas",
-                            color = Color.Black)
-                    }
-                    Button(onClick = { navigateTo(navController, NavigationState.Gastos.route) },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = color3
-                        )
-                    ) {
-                        Text(text = "Gastos",
-                            color = Color.Black
-                        )
-                    }
-                }
-
-                Row (modifier = Modifier.padding(horizontal = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                    Button(onClick = { navigateTo(navController, NavigationState.Ingresos.route) },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = color3
-                        )
-                    ) {
-                        Text(text = "Ingresos",
-                            color = Color.Black)
-                    }
-                    Button(onClick = { navigateTo(navController, NavigationState.Invest.route) },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = color3
-                        )
-                    ) {
-                        Text(text = "Activos",
-                            color = Color.Black)
                     }
                 }
             }

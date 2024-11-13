@@ -20,7 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.trackcap.navigation.AppBar
+import com.example.trackcap.navigation.AppBarBottom
+import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.navigation.navigateTo
 import com.example.trackcap.ui.common.view.floatingBotton
@@ -29,8 +30,9 @@ import com.example.trackcap.ui.common.view.listSelector
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun addInvestScreen(navController: NavController) {
-    Scaffold (topBar = { AppBar(title = "Agregar inversión", navController = navController) },
-        floatingActionButton = { floatingBotton(navController, NavigationState.Back) }
+    Scaffold (
+        topBar = { AppBarTop(title = "Añadir activo", navController = navController) },
+        bottomBar = { AppBarBottom(navController = navController) }
     ) { innerPadding ->
         // Inversión
         val categories = listOf("Comida", "Transporte", "Entretenimiento", "Salud", "Educación", "Otros")

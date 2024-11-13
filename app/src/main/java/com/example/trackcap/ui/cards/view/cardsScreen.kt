@@ -20,7 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.trackcap.R
-import com.example.trackcap.navigation.AppBar
+import com.example.trackcap.navigation.AppBarBottom
+import com.example.trackcap.navigation.AppBarTop
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -34,7 +35,9 @@ fun cardsScreen(navController: NavController) {
 
     val img = R.drawable.img_card
 
-    Scaffold (topBar = { AppBar(title = "Tarjetas", navController) }
+    Scaffold (
+        topBar = { AppBarTop(title = "Tarjetas", navController = navController) },
+        bottomBar = { AppBarBottom(navController = navController) }
     ) { innerPadding ->
         LazyColumn (
             contentPadding = innerPadding,
