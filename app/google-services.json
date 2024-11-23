@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "491657708415",
+    "project_id": "trackcap-e9460",
+    "storage_bucket": "trackcap-e9460.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491657708415:android:b510a95aca1047668d504a",
+        "android_client_info": {
+          "package_name": "com.example.trackcap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsXP7jODnI7T712VxTKpP604WxoQCRU8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
