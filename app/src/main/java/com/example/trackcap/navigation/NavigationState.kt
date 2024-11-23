@@ -9,4 +9,5 @@ sealed class NavigationState(val route: String) {
     data object Add: NavigationState("add")
     data object Back: NavigationState("back")
     data object Login: NavigationState("login")
+    data object Register: NavigationState("register")
 }
