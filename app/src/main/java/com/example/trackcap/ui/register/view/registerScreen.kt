@@ -1,11 +1,12 @@
 package com.example.trackcap.ui.register.view
 
-import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -13,18 +14,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.navigation.navigateTo
+import com.google.firebase.auth.FirebaseAuth
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun registerScreen(navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
-    Scaffold() {
+    Scaffold { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -54,10 +57,9 @@ fun registerScreen(navController: NavController) {
             Button(
                 onClick = {
                     if (password == confirmPassword) {
-                        navigateTo(navController, NavigationState.Home.route)
-                        // Aquí conectaremos Firebase en el siguiente paso
+                        registerUser(email, password, navController, context)
                     } else {
-                        // Manejo de error: Contraseñas no coinciden
+                        Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
                     }
                 }
             ) {
@@ -67,8 +69,16 @@ fun registerScreen(navController: NavController) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun registerScreenPreview() {
-    registerScreen(navController = rememberNavController())
+fun registerUser(email: String, password: String, navController: NavController, context: android.content.Context) {
+    val auth = FirebaseAuth.getInstance()
+
+    auth.createUserWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
+                navigateTo(navController, NavigationState.Home.route)
+            } else {
+                Toast.makeText(context, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
 }
