@@ -1,5 +1,7 @@
-package com.example.trackcap.networking.response
+package com.example.trackcap.networking
 
+import com.example.trackcap.networking.response.SearchResponse
+import com.example.trackcap.networking.response.StockResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

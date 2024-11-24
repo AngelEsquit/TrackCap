@@ -27,3 +27,16 @@ data class BestMatch(
     @SerializedName("1. symbol") val symbol: String,
     @SerializedName("2. name") val name: String
 )
+
+fun SearchResponse.toSymbols(): List<String> {
+    return this.bestMatches.map { it.symbol }
+}
+
+fun StockResponse.toCurrentAmount(): Double {
+    val stockData = this.timeSeries.values.firstOrNull()
+    return stockData?.close?.toDoubleOrNull() ?: 0.0
+}
+
+fun StockResponse.toStockData(): StockData {
+    return this.timeSeries.values.first()
+}

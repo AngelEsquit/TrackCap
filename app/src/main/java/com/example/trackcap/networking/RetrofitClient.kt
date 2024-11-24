@@ -1,6 +1,5 @@
 package com.example.trackcap.networking
 
-import com.example.trackcap.networking.response.AlphaVantageService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
