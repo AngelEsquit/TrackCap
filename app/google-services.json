@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "491657708415-a8k635ku53sigotochkpenn64056aadi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trackcap",
+            "certificate_hash": "1cfa3e1e49f2ba77780f5e373c68cb541c856584"
+          }
+        },
+        {
           "client_id": "491657708415-or6rp5t8is6nmocu0pf3rk89lphp46m0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
