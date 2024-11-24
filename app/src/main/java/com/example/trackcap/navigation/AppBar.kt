@@ -32,7 +32,7 @@ import com.example.trackcap.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBarTop(title: String, navController: NavController) {
+fun AppBarTop(title: String, navController: NavController, back: Boolean = true) {
     TopAppBar(
         title = {
             Box(
@@ -43,7 +43,7 @@ fun AppBarTop(title: String, navController: NavController) {
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF6650a4)),
         navigationIcon = {
-            if (navController.previousBackStackEntry != null) {
+            if (navController.previousBackStackEntry != null && back) {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,

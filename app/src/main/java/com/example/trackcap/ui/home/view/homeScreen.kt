@@ -46,7 +46,7 @@ fun homeScreen(navController: NavController) {
     }
 
     Scaffold (
-        topBar = { AppBarTop(title = "TrackCap", navController = navController) },
+        topBar = { AppBarTop(title = "TrackCap", navController = navController, back = false) },
         bottomBar = { AppBarBottom(navController = navController) }
     ) { innerPadding ->
         LazyColumn (
