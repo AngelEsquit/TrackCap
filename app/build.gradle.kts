@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.gms.google-services")
+    kotlin("kapt") // Add kapt plugin
 }
 
 android {
@@ -68,9 +69,10 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
+    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.runtime.jvm)
+    kapt("androidx.room:room-compiler:2.7.0-alpha11") // Add Room annotation processor
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
