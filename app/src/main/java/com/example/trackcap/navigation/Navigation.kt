@@ -13,7 +13,6 @@ import com.example.trackcap.ui.gastos.view.gastosScreen
 import com.example.trackcap.ui.ingresos.view.ingresosScreen
 import com.example.trackcap.ui.invest.view.investScreen
 import com.example.trackcap.ui.login.view.loginScreen
-import com.example.trackcap.ui.register.view.registerScreen
 
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -53,8 +52,5 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
             loginScreen(navController = navController)
         }
 
-        composable(route = NavigationState.Register.route) {
-            registerScreen(navController = navController)
-        }
     }
 }
