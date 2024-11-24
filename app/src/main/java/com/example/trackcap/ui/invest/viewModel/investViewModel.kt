@@ -7,6 +7,11 @@ import com.example.trackcap.ui.invest.repository.InvestRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import com.example.trackcap.networking.RetrofitClient
+import com.example.trackcap.networking.response.SearchResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 data class Investment(
     val name: String,
@@ -32,12 +37,20 @@ class InvestViewModel(private val repository: InvestRepository) : ViewModel() {
         }
     }
 
-    fun searchInvestments(query: String) {
-        viewModelScope.launch {
-            repository.searchInvestments(query) { results ->
-                _suggestions.value = results
+    fun searchInvestments(query: String, onResult: (List<String>) -> Unit) {
+        val call = RetrofitClient.instance.searchInvestments("SYMBOL_SEARCH", query, "YOUR_API_KEY")
+        call.enqueue(object : Callback<SearchResponse> {
+            override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
+                if (response.isSuccessful) {
+                    val results = response.body()?.bestMatches?.map { it.symbol } ?: emptyList()
+                    onResult(results)
+                }
             }
-        }
+
+            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                onResult(emptyList())
+            }
+        })
     }
 
     fun addInvestment(investment: Investment) {

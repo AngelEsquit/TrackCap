@@ -9,19 +9,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
-import com.example.trackcap.networking.RetrofitClient
-import com.example.trackcap.networking.response.SearchResponse
+import com.example.trackcap.ui.invest.repository.InvestRepository
+import com.example.trackcap.ui.invest.viewModel.InvestViewModel
+import com.example.trackcap.ui.invest.viewModel.InvestViewModelFactory
 import com.example.trackcap.ui.invest.viewModel.Investment
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @Composable
-fun AddInvestScreen(navController: NavController) {
+fun AddInvestScreen(
+    navController: NavController,
+    viewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(InvestRepository()))
+) {
     var investmentName by remember { mutableStateOf("") }
     var originalAmount by remember { mutableStateOf("") }
     var suggestions by remember { mutableStateOf(listOf<String>()) }
@@ -40,7 +41,7 @@ fun AddInvestScreen(navController: NavController) {
                     onValueChange = {
                         investmentName = it
                         if (it.isNotEmpty()) {
-                            searchInvestments(it) { results: List<String> ->
+                            viewModel.searchInvestments(it) { results: List<String> ->
                                 suggestions = results
                             }
                         } else {
@@ -80,7 +81,7 @@ fun AddInvestScreen(navController: NavController) {
                 Button(
                     onClick = {
                         val investment = Investment(investmentName, originalAmount.toDouble(), 0.0)
-                        // Add investment to the list and navigate back
+                        viewModel.addInvestment(investment)
                         navController.popBackStack()
                     },
                     modifier = Modifier.fillMaxWidth()
@@ -90,20 +91,4 @@ fun AddInvestScreen(navController: NavController) {
             }
         }
     }
-}
-
-fun searchInvestments(query: String, onResult: (List<String>) -> Unit) {
-    val call = RetrofitClient.instance.searchInvestments("SYMBOL_SEARCH", query, "YOUR_API_KEY")
-    call.enqueue(object : Callback<SearchResponse> {
-        override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
-            if (response.isSuccessful) {
-                val results = response.body()?.bestMatches?.map { it.symbol } ?: emptyList()
-                onResult(results)
-            }
-        }
-
-        override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-            onResult(emptyList())
-        }
-    })
 }

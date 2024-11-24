@@ -2,18 +2,17 @@ package com.example.trackcap.ui.invest.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,7 +26,10 @@ import com.example.trackcap.ui.invest.viewModel.InvestViewModelFactory
 import com.example.trackcap.ui.invest.viewModel.Investment
 
 @Composable
-fun investScreen(navController: NavController, viewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(InvestRepository()))) {
+fun InvestScreen(
+    navController: NavController,
+    viewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(InvestRepository()))
+) {
     val investments by viewModel.investments.collectAsState()
 
     Scaffold(
@@ -95,6 +97,7 @@ fun investScreen(navController: NavController, viewModel: InvestViewModel = view
                                 text = "Activo",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
+                                color = Color.Black,
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .weight(1f)
@@ -103,6 +106,7 @@ fun investScreen(navController: NavController, viewModel: InvestViewModel = view
                                 text = "Monto Original",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
+                                color = Color.Black,
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .weight(1f)
@@ -111,6 +115,7 @@ fun investScreen(navController: NavController, viewModel: InvestViewModel = view
                                 text = "Monto Actual",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
+                                color = Color.Black,
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .weight(1f)
@@ -119,6 +124,7 @@ fun investScreen(navController: NavController, viewModel: InvestViewModel = view
                                 text = "Cambio",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
+                                color = Color.Black,
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .weight(1f)
@@ -134,6 +140,7 @@ fun investScreen(navController: NavController, viewModel: InvestViewModel = view
                                 Text(
                                     text = investment.name,
                                     fontSize = 16.sp,
+                                    color = Color.Black,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .weight(1f)
@@ -141,6 +148,7 @@ fun investScreen(navController: NavController, viewModel: InvestViewModel = view
                                 Text(
                                     text = "Q " + "%.2f".format(investment.originalAmount),
                                     fontSize = 16.sp,
+                                    color = Color.Black,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .weight(1f)
@@ -148,6 +156,7 @@ fun investScreen(navController: NavController, viewModel: InvestViewModel = view
                                 Text(
                                     text = "Q " + "%.2f".format(investment.currentAmount),
                                     fontSize = 16.sp,
+                                    color = Color.Black,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .weight(1f)

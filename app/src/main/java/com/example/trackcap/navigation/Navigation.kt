@@ -10,7 +10,7 @@ import com.example.trackcap.ui.cards.view.homeScreen
 import com.example.trackcap.ui.common.view.addCatScreen
 import com.example.trackcap.ui.gastos.view.gastosScreen
 import com.example.trackcap.ui.ingresos.view.ingresosScreen
-import com.example.trackcap.ui.invest.view.investScreen
+import com.example.trackcap.ui.invest.view.InvestScreen
 import com.example.trackcap.ui.invest.view.AddInvestScreen
 import com.example.trackcap.ui.login.view.loginScreen
 
@@ -25,7 +25,7 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
         }
 
         composable(route = NavigationState.Invest.route) {
-            investScreen(navController = navController)
+            InvestScreen(navController = navController)
         }
 
         composable(route = NavigationState.Gastos.route) {
