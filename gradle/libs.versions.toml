@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.2"
+converterGson = "2.11.0"
 firebaseBom = "33.6.0"
 firebaseFirestoreKtx = "25.1.1"
 kotlin = "1.9.0"
@@ -14,12 +15,14 @@ mpandroidchart = "v3.1.0"
 mpandroidchartVersion = "v3.0.1"
 navigationRuntimeKtx = "2.8.2"
 navigationCompose = "2.8.2"
+retrofit = "2.11.0"
 uiTextGoogleFonts = "1.7.3"
 firebaseAuthKtx = "23.1.0"
 playServicesAuth = "21.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -44,6 +47,7 @@ androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 mpandroidchart-vv301 = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchartVersion" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -19,6 +19,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "ALPHA_VANTAGE_API_KEY", "\"${project.properties["ALPHA_VANTAGE_API_KEY"]}\"")
     }
 
     buildTypes {
@@ -39,6 +41,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true // Enable custom BuildConfig fields feature
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -48,11 +51,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -80,6 +81,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.firestore.ktx)
 
-
-
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }
