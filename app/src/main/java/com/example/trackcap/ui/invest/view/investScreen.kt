@@ -1,130 +1,166 @@
 package com.example.trackcap.ui.invest.view
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.example.trackcap.R
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
+import com.example.trackcap.ui.invest.viewModel.InvestViewModel
+import com.example.trackcap.ui.invest.repository.InvestRepository
+import com.example.trackcap.ui.invest.viewModel.InvestViewModelFactory
+import com.example.trackcap.ui.invest.viewModel.Investment
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun investScreen(navController: NavController) {
-    val color0 = colorScheme.surfaceContainerLowest
-    val color1 = colorScheme.outlineVariant
-    val color2 = colorScheme.outline
-    val color3 = colorScheme.tertiaryContainer
+fun investScreen(navController: NavController, viewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(InvestRepository()))) {
+    val investments by viewModel.investments.collectAsState()
 
-    val saldo by remember { mutableStateOf(0.00) }
-    val activos = remember {
-        mutableStateOf(listOf(Triple("Activo 1", 100.00, color1), Triple("Activo 2", 200.00, color2),
-            Triple("Activo 3", 150.00, color1), Triple("Activo 4", 50.00, color2),
-            Triple("Activo 5", 75.00, color1)))
-    }
-
-    Scaffold (
+    Scaffold(
         topBar = { AppBarTop(title = "Activos", navController = navController) },
         bottomBar = { AppBarBottom(navController = navController) }
-    ) {  innerPadding ->
-        LazyColumn (contentPadding = innerPadding,
-            modifier = Modifier
-                .padding(16.dp)) {
+    ) { innerPadding ->
+        LazyColumn(
+            contentPadding = innerPadding,
+            modifier = Modifier.padding(16.dp)
+        ) {
             item {
-                Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = color3
-                    )
+                Button(
+                    onClick = { navController.navigate("addInvest") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                 ) {
-                    Text(text = "Agregar activo",
-                        color = Color.Black)
+                    Text(text = "Agregar activo", color = Color.Black)
                 }
             }
 
             item {
-                Row (modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                    horizontalArrangement = Arrangement.Center) {
-                    Column (modifier = Modifier
-                        .wrapContentSize(Alignment.Center)) {
-                        Text(text = "Saldo",
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Column(modifier = Modifier.wrapContentSize(Alignment.Center)) {
+                        Text(
+                            text = "Saldo",
                             fontSize = 35.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.align(Alignment.CenterHorizontally))
-                        Text(text = "Q " + "%.2f".format(saldo),
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                        Text(
+                            text = "Q " + "%.2f".format(investments.sumOf { it.currentAmount }),
                             fontSize = 28.sp,
-                            modifier = Modifier.align(Alignment.CenterHorizontally))
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
                     }
                 }
             }
 
             item {
                 Row {
-                    Text(text = "Activos",
+                    Text(
+                        text = "Activos",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = 16.dp))
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
                 }
 
-                Column (modifier = Modifier
-                    .wrapContentSize(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.wrapContentSize(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Column {
-                        Row (modifier = Modifier
-                            .fillMaxWidth()
-                            .background(color0)){
-                            Text(text = "Activo",
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.LightGray)
+                        ) {
+                            Text(
+                                text = "Activo",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .weight(1f))
-                            Text(text = "Monto",
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "Monto Original",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .weight(1f))
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "Monto Actual",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "Cambio",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .weight(1f)
+                            )
                         }
 
-
-                        activos.value.forEach() { activo ->
-                            Row (modifier = Modifier
-                                .fillMaxWidth()
-                                .background(activo.third)){
+                        investments.forEach { investment ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color.White)
+                            ) {
                                 Text(
-                                    text = activo.first,
+                                    text = investment.name,
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .weight(1f)
                                 )
                                 Text(
-                                    text = "Q " + "%.2f".format(activo.second),
+                                    text = "Q " + "%.2f".format(investment.originalAmount),
                                     fontSize = 16.sp,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .weight(1f)
+                                )
+                                Text(
+                                    text = "Q " + "%.2f".format(investment.currentAmount),
+                                    fontSize = 16.sp,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .weight(1f)
+                                )
+                                val change = investment.currentAmount - investment.originalAmount
+                                val changeIcon = when {
+                                    change > 0 -> R.drawable.ic_arrow_up
+                                    change < 0 -> R.drawable.ic_arrow_down
+                                    else -> R.drawable.ic_arrow_right
+                                }
+                                Image(
+                                    painter = painterResource(id = changeIcon),
+                                    contentDescription = null,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .weight(1f)
@@ -136,10 +172,4 @@ fun investScreen(navController: NavController) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewInvestScreen() {
-    investScreen(navController = rememberNavController())
 }

@@ -1,86 +1,109 @@
 package com.example.trackcap.ui.invest.view
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
-import com.example.trackcap.navigation.NavigationState
-import com.example.trackcap.navigation.navigateTo
-import com.example.trackcap.ui.common.view.floatingBotton
-import com.example.trackcap.ui.common.view.listSelector
+import com.example.trackcap.networking.RetrofitClient
+import com.example.trackcap.networking.response.SearchResponse
+import com.example.trackcap.ui.invest.viewModel.Investment
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun addInvestScreen(navController: NavController) {
-    Scaffold (
+fun AddInvestScreen(navController: NavController) {
+    var investmentName by remember { mutableStateOf("") }
+    var originalAmount by remember { mutableStateOf("") }
+    var suggestions by remember { mutableStateOf(listOf<String>()) }
+
+    Scaffold(
         topBar = { AppBarTop(title = "Añadir activo", navController = navController) },
         bottomBar = { AppBarBottom(navController = navController) }
     ) { innerPadding ->
-        // Inversión
-        val categories = listOf("Comida", "Transporte", "Entretenimiento", "Salud", "Educación", "Otros")
-        val metodoPago = listOf("Efectivo", "Tarjeta de crédito", "Tarjeta de débito", "Transferencia bancaria")
-        var monto by remember { mutableStateOf("") }
-
-        LazyColumn (
+        LazyColumn(
             contentPadding = innerPadding,
             modifier = Modifier.padding(16.dp)
-        ){
-            item { // Selección de categoría
-                Box (modifier = Modifier.padding(vertical = 36.dp)) {
-                    listSelector(label = "Categoría", options = categories, onSelected = { })
-                }
-            }
-
-            item { // Monto
-                Box {
-                    TextField(
-                        value = monto,
-                        onValueChange = { monto = it },
-                        label = { Text("Ingrese el monto") },
-                        placeholder = { Text("Escribe aquí...") },
-                        isError = monto.isEmpty(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        singleLine = true
+        ) {
+            item {
+                TextField(
+                    value = investmentName,
+                    onValueChange = {
+                        investmentName = it
+                        if (it.isNotEmpty()) {
+                            searchInvestments(it) { results: List<String> ->
+                                suggestions = results
+                            }
+                        } else {
+                            suggestions = emptyList()
+                        }
+                    },
+                    label = { Text("Nombre del activo") },
+                    placeholder = { Text("Escribe aquí...") },
+                    singleLine = true
+                )
+                suggestions.forEach { suggestion ->
+                    Text(
+                        text = suggestion,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable {
+                                investmentName = suggestion
+                                suggestions = emptyList()
+                            }
                     )
                 }
             }
 
-            item { // Selección de método de pago
-                Box (modifier = Modifier.padding(vertical = 36.dp)) {
-                    listSelector(label = "Método de pago", options = metodoPago, onSelected = { })
-                }
+            item {
+                TextField(
+                    value = originalAmount,
+                    onValueChange = { originalAmount = it },
+                    label = { Text("Monto original") },
+                    placeholder = { Text("Escribe aquí...") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
             }
 
             item {
-                Button(onClick = { navigateTo(navController, NavigationState.Back.route) }) {
+                Button(
+                    onClick = {
+                        val investment = Investment(investmentName, originalAmount.toDouble(), 0.0)
+                        // Add investment to the list and navigate back
+                        navController.popBackStack()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Text(text = "Agregar inversión")
                 }
             }
         }
-
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun addInvestScreenPreview() {
-    addInvestScreen(navController = rememberNavController())
+fun searchInvestments(query: String, onResult: (List<String>) -> Unit) {
+    val call = RetrofitClient.instance.searchInvestments("SYMBOL_SEARCH", query, "YOUR_API_KEY")
+    call.enqueue(object : Callback<SearchResponse> {
+        override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
+            if (response.isSuccessful) {
+                val results = response.body()?.bestMatches?.map { it.symbol } ?: emptyList()
+                onResult(results)
+            }
+        }
+
+        override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+            onResult(emptyList())
+        }
+    })
 }

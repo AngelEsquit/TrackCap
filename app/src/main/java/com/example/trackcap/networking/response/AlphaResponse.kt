@@ -19,3 +19,11 @@ data class StockData(
     @SerializedName("4. close") val close: String,
     @SerializedName("5. volume") val volume: String
 )
+data class SearchResponse(
+    @SerializedName("bestMatches") val bestMatches: List<BestMatch>
+)
+
+data class BestMatch(
+    @SerializedName("1. symbol") val symbol: String,
+    @SerializedName("2. name") val name: String
+)

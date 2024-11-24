@@ -1,6 +1,5 @@
 package com.example.trackcap.navigation
 
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -12,6 +11,7 @@ import com.example.trackcap.ui.common.view.addCatScreen
 import com.example.trackcap.ui.gastos.view.gastosScreen
 import com.example.trackcap.ui.ingresos.view.ingresosScreen
 import com.example.trackcap.ui.invest.view.investScreen
+import com.example.trackcap.ui.invest.view.AddInvestScreen
 import com.example.trackcap.ui.login.view.loginScreen
 
 @Composable
@@ -52,5 +52,8 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
             loginScreen(navController = navController)
         }
 
+        composable(route = "addInvest") {
+            AddInvestScreen(navController = navController)
+        }
     }
 }

@@ -11,4 +11,11 @@ interface AlphaVantageService {
         @Query("symbol") symbol: String,
         @Query("apikey") apiKey: String
     ): Call<StockResponse>
+
+    @GET("query")
+    fun searchInvestments(
+        @Query("function") function: String,
+        @Query("keywords") keywords: String,
+        @Query("apikey") apiKey: String
+    ): Call<SearchResponse>
 }
