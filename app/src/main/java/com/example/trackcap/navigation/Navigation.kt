@@ -12,14 +12,14 @@ import com.example.trackcap.ui.cards.view.EditCardScreen
 import com.example.trackcap.ui.cards.view.homeScreen
 import com.example.trackcap.ui.cards.viewModel.CardsViewModel
 import com.example.trackcap.ui.gastos.view.AddGastoScreen
-import com.example.trackcap.ui.ingresos.view.addIngresoScreen
-import com.example.trackcap.ui.gastos.view.gastosScreen
+import com.example.trackcap.ui.ingresos.view.AddIngresoScreen
+import com.example.trackcap.ui.gastos.view.GastosScreen
 import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
-import com.example.trackcap.ui.ingresos.view.ingresosScreen
+import com.example.trackcap.ui.ingresos.view.IngresosScreen
 import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
 import com.example.trackcap.ui.invest.view.InvestScreen
 import com.example.trackcap.ui.invest.view.AddInvestScreen
-import com.example.trackcap.ui.login.view.loginScreen
+import com.example.trackcap.ui.login.view.LoginScreen
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -37,11 +37,11 @@ fun Navigation(navController: NavHostController, gastosViewModel: GastosViewMode
         }
 
         composable(route = NavigationState.Gastos.route) {
-            gastosScreen(navController = navController, gastosViewModel = gastosViewModel)
+            GastosScreen(navController = navController, gastosViewModel = gastosViewModel)
         }
 
         composable(route = NavigationState.Ingresos.route) {
-            ingresosScreen(navController = navController, ingresosViewModel = ingresosViewModel)
+            IngresosScreen(navController = navController, ingresosViewModel = ingresosViewModel)
         }
 
         composable(route = NavigationState.Cards.route) {
@@ -63,7 +63,7 @@ fun Navigation(navController: NavHostController, gastosViewModel: GastosViewMode
         }
 
         composable(route = NavigationState.AddIngreso.route) {
-            addIngresoScreen(navController = navController, IngresosViewModel = ingresosViewModel)
+            AddIngresoScreen(navController = navController, IngresosViewModel = ingresosViewModel)
         }
 
         composable(route = NavigationState.AddGasto.route) {
@@ -75,7 +75,7 @@ fun Navigation(navController: NavHostController, gastosViewModel: GastosViewMode
         }
 
         composable(route = NavigationState.Login.route) {
-            loginScreen(navController = navController)
+            LoginScreen(navController = navController)
         }
 
         composable(route = "addInvest") {

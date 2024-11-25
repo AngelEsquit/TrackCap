@@ -36,7 +36,7 @@ import java.time.format.DateTimeFormatter
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun addIngresoScreen(navController: NavController, IngresosViewModel: IngresosViewModel) {
+fun AddIngresoScreen(navController: NavController, IngresosViewModel: IngresosViewModel) {
     var name by remember { mutableStateOf("") }
     var monto by remember { mutableStateOf("") }
     var categoria by remember { mutableStateOf("") }
@@ -120,5 +120,5 @@ fun addIngresoScreen(navController: NavController, IngresosViewModel: IngresosVi
 fun addIngresoScreenPreview() {
     val navController = rememberNavController()
     val viewModel = viewModel(IngresosViewModel::class.java)
-    addIngresoScreen(navController = navController, viewModel)
+    AddIngresoScreen(navController = navController, viewModel)
 }

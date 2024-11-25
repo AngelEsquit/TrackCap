@@ -42,7 +42,7 @@ import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun gastosScreen(navController: NavController, gastosViewModel: GastosViewModel) {
+fun GastosScreen(navController: NavController, gastosViewModel: GastosViewModel) {
 
     LaunchedEffect(Unit) {
         val now = LocalDate.now()
@@ -146,5 +146,5 @@ fun gastosScreen(navController: NavController, gastosViewModel: GastosViewModel)
 fun gastosScreenPreview() {
     val navController = rememberNavController()
     val gastosViewModel = viewModel(GastosViewModel::class.java)
-    gastosScreen(navController = navController, gastosViewModel = gastosViewModel)
+    GastosScreen(navController = navController, gastosViewModel = gastosViewModel)
 }

@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
 @Composable
-fun loginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
     val activity = context as Activity
     val auth = FirebaseAuth.getInstance()
@@ -86,5 +86,5 @@ fun loginScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun loginScreenPreview() {
-    loginScreen(navController = rememberNavController())
+    LoginScreen(navController = rememberNavController())
 }

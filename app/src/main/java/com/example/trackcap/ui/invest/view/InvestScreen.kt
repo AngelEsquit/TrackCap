@@ -24,7 +24,6 @@ import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.ui.invest.viewModel.InvestViewModel
 import com.example.trackcap.ui.invest.repository.InvestRepository
 import com.example.trackcap.ui.invest.viewModel.InvestViewModelFactory
-import com.example.trackcap.ui.invest.viewModel.Investment
 
 @Composable
 fun InvestScreen(
