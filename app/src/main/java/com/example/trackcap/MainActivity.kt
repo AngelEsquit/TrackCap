@@ -11,12 +11,12 @@ import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
 import com.example.trackcap.ui.gastos.viewModel.GastosViewModelFactory
 import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
 import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModelFactory
+import com.example.trackcap.ui.cards.viewModel.CardsViewModel
 import com.example.trackcap.ui.theme.TrackCapTheme
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var gastosViewModel: GastosViewModel
-
     private lateinit var ingresosViewModel: IngresosViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,11 +34,13 @@ class MainActivity : ComponentActivity() {
             GastosViewModelFactory(gastosRepository)
         )[GastosViewModel::class.java]
 
+        val cardsViewModel = ViewModelProvider(this)[CardsViewModel::class.java]
+
         enableEdgeToEdge()
         setContent {
             TrackCapTheme {
                 val navController = rememberNavController()
-                Navigation(navController = navController, gastosViewModel = gastosViewModel, ingresosViewModel = ingresosViewModel)
+                Navigation(navController = navController, gastosViewModel = gastosViewModel, ingresosViewModel = ingresosViewModel, viewModel = cardsViewModel)
             }
         }
     }

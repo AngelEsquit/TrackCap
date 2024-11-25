@@ -2,23 +2,24 @@ package com.example.trackcap.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.trackcap.ui.cards.view.cardsScreen
+import com.example.trackcap.ui.cards.view.AddCardScreen
+import com.example.trackcap.ui.cards.view.CardsScreen
+import com.example.trackcap.ui.cards.view.EditCardScreen
 import com.example.trackcap.ui.cards.view.homeScreen
-import com.example.trackcap.ui.common.view.addCatScreen
+import com.example.trackcap.ui.cards.viewModel.CardsViewModel
 import com.example.trackcap.ui.gastos.view.gastosScreen
 import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
 import com.example.trackcap.ui.ingresos.view.ingresosScreen
 import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
-import com.example.trackcap.ui.invest.view.InvestScreen
 import com.example.trackcap.ui.invest.view.AddInvestScreen
+import com.example.trackcap.ui.invest.view.InvestScreen
 import com.example.trackcap.ui.login.view.loginScreen
 
 @Composable
-fun Navigation(navController: NavHostController, gastosViewModel: GastosViewModel, ingresosViewModel: IngresosViewModel,modifier: Modifier = Modifier) {
+fun Navigation(navController: NavHostController, gastosViewModel: GastosViewModel, ingresosViewModel: IngresosViewModel, viewModel: CardsViewModel, modifier: Modifier = Modifier) {
     NavHost(navController = navController,
         startDestination = NavigationState.Login.route,
         modifier = modifier) {
@@ -40,11 +41,21 @@ fun Navigation(navController: NavHostController, gastosViewModel: GastosViewMode
         }
 
         composable(route = NavigationState.Cards.route) {
-            cardsScreen(navController = navController)
+            CardsScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(route = NavigationState.Add.route) {
-            addCatScreen(navController = navController)
+        composable("addCard") {
+            AddCardScreen(navController = navController) { card ->
+                viewModel.addCard(card)
+            }
+        }
+
+        composable("editCard/{cardName}") { backStackEntry ->
+            val cardName = backStackEntry.arguments?.getString("cardName")
+            val card = viewModel.cards.value.find { it.name == cardName }
+            if (card != null) {
+                EditCardScreen(navController = navController, card = card, onUpdateCard = viewModel::updateCard, onDeleteCard = viewModel::deleteCard)
+            }
         }
 
         composable(route = NavigationState.Back.route) {
