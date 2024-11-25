@@ -14,6 +14,10 @@ class GastosRepository(private val gastoItemDao: GastoItemDao) {
         gastoItemDao.insert(item)
     }
 
+    suspend fun getItemsByDate(date: Long): List<GastoItemEntity> = withContext(Dispatchers.IO) {
+        gastoItemDao.getItemsByDate(date)
+    }
+
     /*
     suspend fun getAllItems(): List<SupermarketItemEntity> = withContext(Dispatchers.IO) {
         supermarketItemDao.getAllItems()

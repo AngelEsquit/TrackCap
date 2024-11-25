@@ -17,6 +17,9 @@ interface GastoItemDao {
 
     @Query("SELECT * FROM gastos_items")
     fun getAllItems(): List<GastoItemEntity>
+
+    @Query("SELECT * FROM gastos_items WHERE date >= :date")
+    fun getItemsByDate(date: Long): List<GastoItemEntity>
     /*
     @Query("DELETE FROM supermarket_items WHERE imagePath = :imagePath")
     suspend fun delete(imagePath: String)

@@ -23,10 +23,11 @@ fun listSelector(
     modifier: Modifier = Modifier,
     label: String,
     options: List<String>,
-    onSelected: (String) -> Unit
+    onSelected: (String) -> Unit,
+    defaultValue: String = ""
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedOptionText = remember { mutableStateOf("") }
+    val selectedOptionText = remember { mutableStateOf(defaultValue) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,

@@ -38,17 +38,15 @@ class IngresosViewModel(private val ingresosRepository: IngresosRepository) : Vi
         }
     }
 
-    fun getAllCategoryItems() {
+    fun getItemsByDate(date: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val items = ingresosRepository.getAllItems()
+                val items = ingresosRepository.getItemsByDate(date)
                     .groupBy { it.category }
                     .map { Pair(it.key, it.value.sumOf { item -> item.amount }.toFloat()) }
                 _ingresosCategories.postValue(items)
             } catch (e: Exception) {
                 handleException(e)
-            } finally {
-                _isLoading.postValue(false)
             }
         }
     }

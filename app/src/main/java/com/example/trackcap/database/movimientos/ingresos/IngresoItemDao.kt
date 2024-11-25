@@ -18,6 +18,9 @@ interface IngresoItemDao {
 
     @Query("SELECT * FROM ingresos_items")
     fun getAllItems(): List<IngresoItemEntity>
+
+    @Query("SELECT * FROM ingresos_items WHERE date >= :date")
+    fun getItemsByDate(date: Long): List<IngresoItemEntity>
     /*
     @Query("DELETE FROM supermarket_items WHERE imagePath = :imagePath")
     suspend fun delete(imagePath: String)

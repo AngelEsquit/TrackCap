@@ -19,6 +19,9 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
     private val _gastosCategories = MutableLiveData<List<Pair<String, Float>>>()
     val gastosCategories: LiveData<List<Pair<String, Float>>> = _gastosCategories
 
+    private val _gastosByDate = MutableLiveData<List<Pair<String, Float>>>()
+    val gastosByDate: LiveData<List<Pair<String, Float>>> = _gastosByDate
+
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
@@ -38,27 +41,27 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
         }
     }
 
-    fun getAllCategoryItems() {
-        viewModelScope.launch {
-            try {
-                val items = gastosRepository.getAllItems()
-                    .groupBy { it.category }
-                    .map { Pair(it.key, it.value.sumOf { item -> item.amount }.toFloat()) }
-                _gastosCategories.postValue(items)
-            } catch (e: Exception) {
-                handleException(e)
-            } finally {
-                _isLoading.postValue(false)
-            }
-        }
-    }
-
     fun addGasto(name: String, amount: Double, category: String, date: Long, paymentMethod: String) {
         viewModelScope.launch {
             try {
                 gastosRepository.insertItem(GastoItemEntity(name = name, amount = amount, category = category, date = date, paymentMethod = paymentMethod))
             } catch (e: Exception) {
                 handleException(e)
+            }
+        }
+    }
+
+    fun getItemsByDate(date: Long) {
+        viewModelScope.launch {
+            try {
+                val items = gastosRepository.getItemsByDate(date)
+                    .groupBy { it.category }
+                    .map { Pair(it.key, it.value.sumOf { item -> item.amount }.toFloat()) }
+                _gastosByDate.postValue(items)
+            } catch (e: Exception) {
+                handleException(e)
+            } finally {
+                _isLoading.postValue(false)
             }
         }
     }
