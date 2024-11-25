@@ -10,6 +10,10 @@ class GastosRepository(private val gastoItemDao: GastoItemDao) {
         gastoItemDao.getAllItems()
     }
 
+    suspend fun insertItem(item: GastoItemEntity) {
+        gastoItemDao.insert(item)
+    }
+
     /*
     suspend fun getAllItems(): List<SupermarketItemEntity> = withContext(Dispatchers.IO) {
         supermarketItemDao.getAllItems()

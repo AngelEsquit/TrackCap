@@ -1,5 +1,6 @@
 package com.example.trackcap.navigation
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -10,14 +11,17 @@ import com.example.trackcap.ui.cards.view.CardsScreen
 import com.example.trackcap.ui.cards.view.EditCardScreen
 import com.example.trackcap.ui.cards.view.homeScreen
 import com.example.trackcap.ui.cards.viewModel.CardsViewModel
+import com.example.trackcap.ui.gastos.view.AddGastoScreen
+import com.example.trackcap.ui.ingresos.view.addIngresoScreen
 import com.example.trackcap.ui.gastos.view.gastosScreen
 import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
 import com.example.trackcap.ui.ingresos.view.ingresosScreen
 import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
-import com.example.trackcap.ui.invest.view.AddInvestScreen
 import com.example.trackcap.ui.invest.view.InvestScreen
+import com.example.trackcap.ui.invest.view.AddInvestScreen
 import com.example.trackcap.ui.login.view.loginScreen
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun Navigation(navController: NavHostController, gastosViewModel: GastosViewModel, ingresosViewModel: IngresosViewModel, viewModel: CardsViewModel, modifier: Modifier = Modifier) {
     NavHost(navController = navController,
@@ -58,8 +62,16 @@ fun Navigation(navController: NavHostController, gastosViewModel: GastosViewMode
             }
         }
 
+        composable(route = NavigationState.AddIngreso.route) {
+            addIngresoScreen(navController = navController, IngresosViewModel = ingresosViewModel)
+        }
+
+        composable(route = NavigationState.AddGasto.route) {
+            AddGastoScreen(navController = navController, GastosViewModel = gastosViewModel)
+        }
+
         composable(route = NavigationState.Back.route) {
-            navController.navigateUp()
+            navController.popBackStack()
         }
 
         composable(route = NavigationState.Login.route) {

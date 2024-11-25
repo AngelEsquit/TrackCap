@@ -4,24 +4,70 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.trackcap.database.movimientos.ingresos.IngresoItemEntity
 import com.example.trackcap.ui.ingresos.repositories.IngresosRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 
-class IngresosViewModel (private val ingresosRepository: IngresosRepository): ViewModel() {
+class IngresosViewModel(private val ingresosRepository: IngresosRepository) : ViewModel() {
 
     private val _ingresos = MutableLiveData<List<IngresoItemEntity>>()
     val ingresos: LiveData<List<IngresoItemEntity>> = _ingresos
 
+    private val _ingresosCategories = MutableLiveData<List<Pair<String, Float>>>()
+    val ingresosCategories: LiveData<List<Pair<String, Float>>> = _ingresosCategories
+
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    fun getAllItems() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val items = ingresosRepository.getAllItems()
+                _ingresos.postValue(items)
+            } catch (e: Exception) {
+                handleException(e)
+            } finally {
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
+    fun getAllCategoryItems() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val items = ingresosRepository.getAllItems()
+                    .groupBy { it.category }
+                    .map { Pair(it.key, it.value.sumOf { item -> item.amount }.toFloat()) }
+                _ingresosCategories.postValue(items)
+            } catch (e: Exception) {
+                handleException(e)
+            } finally {
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
+    fun addIngreso(name: String, amount: Double, category: String, date: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                ingresosRepository.insert(IngresoItemEntity(name = name, amount = amount, category = category, date = date))
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
     private fun handleException(exception: Exception) {
         when (exception) {
-            is IOException -> _errorMessage.value = "Network error: Check your internet connection."
-            else -> _errorMessage.value = "An unexpected error occurred."
+            is IOException -> _errorMessage.postValue("Network error: Check your internet connection.")
+            else -> _errorMessage.postValue("An unexpected error occurred.")
         }
-        // Optionally log the exception (e.g., using a logger or crash reporting tool)
         exception.printStackTrace()
     }
 }

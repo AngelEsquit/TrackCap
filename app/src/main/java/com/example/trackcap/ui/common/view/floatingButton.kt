@@ -15,7 +15,7 @@ import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.navigation.navigateTo
 
 @Composable
-fun floatingBotton(navController: NavController, route: NavigationState) {
+fun floatingButton(navController: NavController, route: NavigationState) {
     FloatingActionButton(
         onClick = { navigateTo(navController, route.route) },
         modifier = Modifier
@@ -33,8 +33,8 @@ fun floatingBotton(navController: NavController, route: NavigationState) {
 
 @Preview(showBackground = true)
 @Composable
-fun floatingBottonPreview() {
+fun floatingButtonPreview() {
     val navController = rememberNavController()
     val route = NavigationState.Home
-    floatingBotton(navController, route)
+    floatingButton(navController, route)
 }

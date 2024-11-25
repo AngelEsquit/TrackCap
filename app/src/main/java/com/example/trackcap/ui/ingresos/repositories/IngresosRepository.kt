@@ -9,4 +9,8 @@ class IngresosRepository (private val ingresoItemDao: IngresoItemDao) {
     suspend fun getAllItems(): List<IngresoItemEntity> = withContext(Dispatchers.IO) {
         ingresoItemDao.getAllItems()
     }
+
+    suspend fun insert(item: IngresoItemEntity) = withContext(Dispatchers.IO) {
+        ingresoItemDao.insert(item)
+    }
 }

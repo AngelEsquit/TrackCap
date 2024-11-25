@@ -18,7 +18,7 @@ data class GastoItemEntity(
     val category: String,
 
     @ColumnInfo(name = "amount")
-    val amount: String,
+    val amount: Double,
 
     @ColumnInfo(name = "date")
     val date: Long,

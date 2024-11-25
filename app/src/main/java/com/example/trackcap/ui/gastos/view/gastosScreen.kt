@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,16 +32,18 @@ import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.ui.charts.view.ringChart
-import com.example.trackcap.ui.common.view.floatingBotton
+import com.example.trackcap.ui.common.view.floatingButton
 import com.example.trackcap.ui.common.view.listSelector
 import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun gastosScreen(navController: NavController, gastosViewModel: GastosViewModel) {
-    val categorias = listOf(Pair("Comida", 100f), Pair("Transporte", 200f),
-        Pair("Entretenimiento", 150f), Pair("Salud", 75f),
-        Pair("Educación", 50f), Pair("Otros", 25f))
+
+    LaunchedEffect(Unit) {
+        gastosViewModel.getAllItems()
+        gastosViewModel.getAllCategoryItems()
+    }
 
     val color = colorScheme.tertiaryContainer
 
@@ -48,7 +51,7 @@ fun gastosScreen(navController: NavController, gastosViewModel: GastosViewModel)
     Scaffold (
         topBar = { AppBarTop(title = "Gastos", navController = navController) },
         bottomBar = { AppBarBottom(navController = navController) },
-        floatingActionButton = { floatingBotton(navController = navController, route = NavigationState.Add) }
+        floatingActionButton = { floatingButton(navController = navController, route = NavigationState.AddGasto) }
     ) { innerPadding ->
         LazyColumn (
             contentPadding = innerPadding,
@@ -64,7 +67,7 @@ fun gastosScreen(navController: NavController, gastosViewModel: GastosViewModel)
                 Box(modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)) {
-                    ringChart(categorias)
+                    ringChart(gastosViewModel.gastosCategories.value ?: emptyList())
                 }
             }
 
@@ -80,7 +83,7 @@ fun gastosScreen(navController: NavController, gastosViewModel: GastosViewModel)
                 Column (modifier = Modifier
                     .padding(top = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    categorias.chunked(3).forEach { row ->
+                    gastosViewModel.gastosCategories.value?.chunked(3)?.forEach { row ->
                         Row(modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(),
