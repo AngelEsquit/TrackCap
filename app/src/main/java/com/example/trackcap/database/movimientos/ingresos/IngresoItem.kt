@@ -21,5 +21,5 @@ data class IngresoItemEntity(
     val amount: String,
 
     @ColumnInfo(name = "date")
-    val date: String
+    val date: Long
 )

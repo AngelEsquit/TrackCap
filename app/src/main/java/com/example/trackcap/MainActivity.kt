@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             TrackCapTheme {
                 val navController = rememberNavController()
-                Navigation(navController = navController)
+                Navigation(navController = navController, gastosViewModel = gastosViewModel, ingresosViewModel = ingresosViewModel)
             }
         }
     }

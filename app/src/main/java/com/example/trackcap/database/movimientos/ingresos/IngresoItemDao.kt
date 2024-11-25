@@ -16,7 +16,7 @@ interface IngresoItemDao {
     @Update
     suspend fun update(item: IngresoItemEntity)
 
-    @Query("SELECT * FROM ingreso_items")
+    @Query("SELECT * FROM ingresos_items")
     fun getAllItems(): List<IngresoItemEntity>
     /*
     @Query("DELETE FROM supermarket_items WHERE imagePath = :imagePath")

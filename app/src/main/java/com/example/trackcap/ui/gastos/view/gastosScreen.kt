@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.AppBarBottom
@@ -32,10 +33,11 @@ import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.ui.charts.view.ringChart
 import com.example.trackcap.ui.common.view.floatingBotton
 import com.example.trackcap.ui.common.view.listSelector
+import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun gastosScreen(navController: NavController) {
+fun gastosScreen(navController: NavController, gastosViewModel: GastosViewModel) {
     val categorias = listOf(Pair("Comida", 100f), Pair("Transporte", 200f),
         Pair("Entretenimiento", 150f), Pair("Salud", 75f),
         Pair("Educación", 50f), Pair("Otros", 25f))
@@ -116,5 +118,6 @@ fun gastosScreen(navController: NavController) {
 @Composable
 fun gastosScreenPreview() {
     val navController = rememberNavController()
-    gastosScreen(navController = navController)
+    val gastosViewModel = viewModel(GastosViewModel::class.java)
+    gastosScreen(navController = navController, gastosViewModel = gastosViewModel)
 }

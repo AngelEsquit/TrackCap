@@ -16,11 +16,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.AppBarBottom
@@ -29,10 +31,13 @@ import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.ui.charts.view.ringChart
 import com.example.trackcap.ui.common.view.floatingBotton
 import com.example.trackcap.ui.common.view.listSelector
+import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ingresosScreen(navController: NavController) {
+fun ingresosScreen(navController: NavController, ingresosViewModel: IngresosViewModel) {
+    val items = ingresosViewModel.ingresos.observeAsState(initial = emptyList())
+
     val categorias = listOf(Pair("Salario", 1000f), Pair("Ventas", 500f),
         Pair("Intereses", 250f), Pair("Regalías", 100f),
         Pair("Inversiones", 50f), Pair("Otros", 25f))
@@ -103,5 +108,6 @@ fun ingresosScreen(navController: NavController) {
 @Composable
 fun ingresosScreenPreview() {
     val navController = rememberNavController()
-    ingresosScreen(navController = navController)
+    val ingresosViewModel = viewModel(IngresosViewModel::class.java)
+    ingresosScreen(navController = navController, ingresosViewModel = ingresosViewModel)
 }
