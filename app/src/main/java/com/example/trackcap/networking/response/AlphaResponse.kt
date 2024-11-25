@@ -2,23 +2,13 @@ package com.example.trackcap.networking.response
 
 import com.google.gson.annotations.SerializedName
 
-data class StockResponse(
-    @SerializedName("Meta Data") val metaData: MetaData,
-    @SerializedName("Time Series (5min)") val timeSeries: Map<String, StockData>
-)
 
 data class MetaData(
     @SerializedName("1. Information") val information: String,
     @SerializedName("2. Symbol") val symbol: String
 )
 
-data class StockData(
-    @SerializedName("1. open") val open: String,
-    @SerializedName("2. high") val high: String,
-    @SerializedName("3. low") val low: String,
-    @SerializedName("4. close") val close: String,
-    @SerializedName("5. volume") val volume: String
-)
+
 data class SearchResponse(
     @SerializedName("bestMatches") val bestMatches: List<BestMatch>
 )
@@ -33,10 +23,27 @@ fun SearchResponse.toSymbols(): List<String> {
 }
 
 fun StockResponse.toCurrentAmount(): Double {
-    val stockData = this.timeSeries.values.firstOrNull()
+    val stockData = this.timeSeries?.values?.firstOrNull()
     return stockData?.close?.toDoubleOrNull() ?: 0.0
 }
 
-fun StockResponse.toStockData(): StockData {
-    return this.timeSeries.values.first()
-}
+
+data class StockResponse(
+    @SerializedName("Time Series (1min)")
+    val timeSeries: Map<String, StockData>?
+)
+
+data class StockData(
+    @SerializedName("4. close")
+    val close: String
+)
+
+data class ExchangeRateResponse(
+    @SerializedName("Realtime Currency Exchange Rate")
+    val realtimeRate: ExchangeRateData?
+)
+
+data class ExchangeRateData(
+    @SerializedName("5. Exchange Rate")
+    val rate: String
+)

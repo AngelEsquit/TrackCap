@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.trackcap.MyApp
 import com.example.trackcap.R
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
@@ -28,7 +29,7 @@ import com.example.trackcap.ui.invest.viewModel.Investment
 @Composable
 fun InvestScreen(
     navController: NavController,
-    viewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(InvestRepository()))
+    viewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(InvestRepository((navController.context.applicationContext as MyApp).database.activoItemDao())))
 ) {
     val investments by viewModel.investments.collectAsState()
 

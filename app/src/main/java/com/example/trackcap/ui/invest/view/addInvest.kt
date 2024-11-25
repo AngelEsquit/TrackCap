@@ -11,6 +11,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.trackcap.MyApp
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.ui.invest.repository.InvestRepository
@@ -21,11 +22,11 @@ import com.example.trackcap.ui.invest.viewModel.Investment
 @Composable
 fun AddInvestScreen(
     navController: NavController,
-    viewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(InvestRepository()))
+    viewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(InvestRepository((navController.context.applicationContext as MyApp).database.activoItemDao())))
 ) {
     var investmentName by remember { mutableStateOf("") }
     var originalAmount by remember { mutableStateOf("") }
-    var suggestions by remember { mutableStateOf(listOf<String>()) }
+    val suggestions by viewModel.suggestions.collectAsState()
 
     Scaffold(
         topBar = { AppBarTop(title = "Añadir activo", navController = navController) },
@@ -41,11 +42,7 @@ fun AddInvestScreen(
                     onValueChange = {
                         investmentName = it
                         if (it.isNotEmpty()) {
-                            viewModel.searchInvestments(it) { results: List<String> ->
-                                suggestions = results
-                            }
-                        } else {
-                            suggestions = emptyList()
+                            viewModel.searchInvestments(it)
                         }
                     },
                     label = { Text("Nombre del activo") },
@@ -60,7 +57,7 @@ fun AddInvestScreen(
                             .padding(8.dp)
                             .clickable {
                                 investmentName = suggestion
-                                suggestions = emptyList()
+                                viewModel.searchInvestments("") // Clear suggestions
                             }
                     )
                 }

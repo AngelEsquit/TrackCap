@@ -8,7 +8,7 @@ import com.example.trackcap.ui.gastos.repositories.GastosRepository
 import com.example.trackcap.ui.ingresos.repositories.IngresosRepository
 
 class MyApp : Application() {
-    private lateinit var database: AppDatabase
+    lateinit var database: AppDatabase
         private set
 
     lateinit var gastosRepository: GastosRepository

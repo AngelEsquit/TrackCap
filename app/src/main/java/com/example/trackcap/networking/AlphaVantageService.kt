@@ -1,5 +1,6 @@
 package com.example.trackcap.networking
 
+import com.example.trackcap.networking.response.ExchangeRateResponse
 import com.example.trackcap.networking.response.SearchResponse
 import com.example.trackcap.networking.response.StockResponse
 import retrofit2.Call
@@ -20,4 +21,11 @@ interface AlphaVantageService {
         @Query("keywords") keywords: String,
         @Query("apikey") apiKey: String
     ): Call<SearchResponse>
+
+    @GET("query")
+    fun getExchangeRate(
+        @Query("from_currency") fromCurrency: String,
+        @Query("to_currency") toCurrency: String,
+        @Query("apikey") apiKey: String
+    ): Call<ExchangeRateResponse>
 }
