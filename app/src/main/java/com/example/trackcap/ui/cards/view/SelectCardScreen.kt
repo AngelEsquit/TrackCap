@@ -25,6 +25,7 @@ import com.example.trackcap.database.movimientos.gastos.GastoItemEntity
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
+import com.example.trackcap.navigation.navigateTo
 import com.example.trackcap.ui.cards.viewModel.Cards_ViewModel
 import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
 
@@ -63,7 +64,7 @@ fun SelectCardScreen(navController: NavController, cardsViewModel: Cards_ViewMod
 
                             gastosViewModel.insertItem(gasto)
 
-                            navController.navigate(NavigationState.Gastos.route)
+                            navigateTo(navController, NavigationState.Gastos.route, NavigationState.SelectCard.route)
                         }
                 ) {
                     Row(
