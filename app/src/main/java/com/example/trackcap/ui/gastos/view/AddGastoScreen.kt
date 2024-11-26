@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.trackcap.database.movimientos.gastos.GastoItemEntity
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
@@ -55,6 +56,8 @@ fun AddGastoScreen(navController: NavController, GastosViewModel: GastosViewMode
                         val timestamp = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
                         if (paymentMethod == "Tarjeta de crédito") {
+                            val gasto = GastoItemEntity(name = name, amount = amount.toDouble(), category = category, date = timestamp, paymentMethod = paymentMethod)
+                            GastosViewModel.selectGasto(gasto)
                             navigateTo(navController, NavigationState.SelectCard.route, popUpToRoute = NavigationState.AddGasto.route)
                         } else {
                             GastosViewModel.addGasto(name, amount.toDouble(), category, timestamp, paymentMethod)

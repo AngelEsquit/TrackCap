@@ -54,7 +54,7 @@ fun Navigation(navController: NavHostController, gastosViewModel: GastosViewMode
         }
 
         composable(route = NavigationState.SelectCard.route) {
-            SelectCardScreen(navController = navController, viewModel = cardsViewModel)
+            SelectCardScreen(navController = navController, cardsViewModel = cardsViewModel, gastosViewModel = gastosViewModel)
         }
 
         composable(route = NavigationState.EditCard.route) {
