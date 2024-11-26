@@ -25,5 +25,5 @@ interface CardItemDao {
     fun getItemById(id: Int): CardItemEntity
 
     @Query("UPDATE cards_items SET balance = :balance WHERE id = :id")
-    fun updateBalance(id: Int, balance: Double)
+    suspend fun updateBalance(id: Int, balance: Double)
 }

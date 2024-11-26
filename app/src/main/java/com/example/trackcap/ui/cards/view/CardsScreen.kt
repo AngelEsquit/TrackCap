@@ -52,7 +52,9 @@ fun CardsScreen(navController: NavController, cardsViewModel: Cards_ViewModel) {
             item {
                 Button(
                     onClick = { navController.navigate("addCard") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = colorScheme.tertiaryContainer)
                 ) {
                     Text(text = "Agregar tarjeta", color = Color.Black)
@@ -60,30 +62,7 @@ fun CardsScreen(navController: NavController, cardsViewModel: Cards_ViewModel) {
             }
 
             items(cards.value) { card ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp)
-                        .clickable {
-                            cardsViewModel.selectCard(card)
-                            navController.navigate(NavigationState.DetailCard.route)
-                        }
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.img_card),
-                            contentDescription = "Card icon",
-                            modifier = Modifier.padding(end = 16.dp)
-                        )
-                        Column {
-                            Text(text = card.name)
-                            Text(text = "Saldo a pagar: ${card.balance}")
-                        }
-                    }
-                }
+                Cards(card = card, navController = navController, cardsViewModel = cardsViewModel)
             }
         }
     }

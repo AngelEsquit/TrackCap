@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.trackcap.R
 import com.example.trackcap.database.movimientos.gastos.GastoItemEntity
@@ -68,18 +69,19 @@ fun SelectCardScreen(navController: NavController, cardsViewModel: Cards_ViewMod
                             navigateTo(navController, NavigationState.Gastos.route, NavigationState.SelectCard.route)
                         }
                 ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Column (
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        Text(text = card.name, fontSize = 24.sp)
                         Image(
                             painter = painterResource(id = R.drawable.img_card),
                             contentDescription = "Card icon",
-                            modifier = Modifier.padding(end = 16.dp)
+                            modifier = Modifier.padding(vertical = 16.dp)
                         )
-                        Column {
-                            Text(text = card.name)
-                        }
+                        Text(text = "Monto a pagar: ${card.balance}", fontSize = 24.sp)
                     }
                 }
             }
