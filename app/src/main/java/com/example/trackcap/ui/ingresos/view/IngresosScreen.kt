@@ -83,48 +83,58 @@ fun IngresosScreen(navController: NavController, ingresosViewModel: IngresosView
                     },
                     defaultValue = "Mes")
             }
-
-            item { // Gráfico
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp)) {
-                    ringChart(ingresosByDate.value)
+            if (ingresosByDate.value.isEmpty()) {
+                item {
+                    Column (modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 16.dp),
+                        verticalArrangement = Arrangement.Center) {
+                        Text(text = "No hay ingresos registrados")
+                    }
                 }
-            }
-
-            item { // Texto
-                Row (modifier = Modifier
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center) {
-                    Text(text = "Categorías")
+            } else {
+                item { // Gráfico
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)) {
+                        ringChart(ingresosByDate.value)
+                    }
                 }
-            }
 
-            item { // Categorías
-                Column (modifier = Modifier
-                    .padding(top = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    ingresosByDate.value.chunked(3).forEach { row ->
-                        Row(modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                            horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                            row.forEach { categoria ->
-                                Card (modifier = Modifier
-                                    .weight(1f)
-                                    .height(40.dp)
-                                    .clickable {
-                                        ingresosViewModel.selectCategory(categoria.first)
-                                        navigateTo(navController, NavigationState.IngresosCategory.route)
-                                    }
-                                ) {
-                                    Box (modifier = Modifier
-                                        .padding(8.dp)
-                                        .fillMaxSize()
-                                        .wrapContentSize(Alignment.Center)) {
-                                        Text(text = categoria.first,
-                                            overflow = TextOverflow.Ellipsis,
-                                            maxLines = 1)
+                item { // Texto
+                    Row (modifier = Modifier
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center) {
+                        Text(text = "Categorías")
+                    }
+                }
+
+                item { // Categorías
+                    Column (modifier = Modifier
+                        .padding(top = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                        ingresosByDate.value.chunked(3).forEach { row ->
+                            Row(modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                                horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                                row.forEach { categoria ->
+                                    Card (modifier = Modifier
+                                        .weight(1f)
+                                        .height(40.dp)
+                                        .clickable {
+                                            ingresosViewModel.selectCategory(categoria.first)
+                                            navigateTo(navController, NavigationState.IngresosCategory.route)
+                                        }
+                                    ) {
+                                        Box (modifier = Modifier
+                                            .padding(8.dp)
+                                            .fillMaxSize()
+                                            .wrapContentSize(Alignment.Center)) {
+                                            Text(text = categoria.first,
+                                                overflow = TextOverflow.Ellipsis,
+                                                maxLines = 1)
+                                        }
                                     }
                                 }
                             }

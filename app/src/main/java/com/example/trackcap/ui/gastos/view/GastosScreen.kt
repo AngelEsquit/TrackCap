@@ -89,52 +89,66 @@ fun GastosScreen(navController: NavController, gastosViewModel: GastosViewModel)
                 )
             }
 
-            item { // Gráfico
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp)) {
-                    ringChart(gastosByDate.value)
+            if (gastosByDate.value.isEmpty()) {
+                item {
+                    Column (modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 16.dp),
+                        verticalArrangement = Arrangement.Center) {
+                        Text(text = "No hay gastos registrados")
+                    }
                 }
-            }
-
-            item { // Texto
-                Row (modifier = Modifier
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center) {
-                    Text(text = "Categorías")
+            } else {
+                item { // Gráfico
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)) {
+                        ringChart(gastosByDate.value)
+                    }
                 }
-            }
 
-            item { // Categorías
-                Column (modifier = Modifier
-                    .padding(top = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    gastosByDate.value.chunked(3).forEach { row ->
-                        Row(modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                            horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                            row.forEach { categoria ->
-                                Card (modifier = Modifier
-                                    .weight(1f)
-                                    .height(40.dp)
-                                    .clickable {
-                                        gastosViewModel.selectCategory(categoria.first)
-                                        navigateTo(navController, NavigationState.GastosCategory.route)
-                                    }
-                                ) {
-                                    Box (modifier = Modifier
-                                        .background(color = color)
-                                        .padding(8.dp)
-                                        .fillMaxSize()
-                                        .wrapContentSize(Alignment.Center)
+                item { // Texto
+                    Row (modifier = Modifier
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center) {
+                        Text(text = "Categorías")
+                    }
+                }
 
-
+                item { // Categorías
+                    Column (modifier = Modifier
+                        .padding(top = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                        gastosByDate.value.chunked(3).forEach { row ->
+                            Row(modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                                horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                                row.forEach { categoria ->
+                                    Card (modifier = Modifier
+                                        .weight(1f)
+                                        .height(40.dp)
+                                        .clickable {
+                                            gastosViewModel.selectCategory(categoria.first)
+                                            navigateTo(
+                                                navController,
+                                                NavigationState.GastosCategory.route
+                                            )
+                                        }
                                     ) {
-                                        Text(text = categoria.first,
-                                            overflow = TextOverflow.Ellipsis,
-                                            maxLines = 1,
-                                            color = Color.Black)
+                                        Box (modifier = Modifier
+                                            .background(color = color)
+                                            .padding(8.dp)
+                                            .fillMaxSize()
+                                            .wrapContentSize(Alignment.Center)
+
+
+                                        ) {
+                                            Text(text = categoria.first,
+                                                overflow = TextOverflow.Ellipsis,
+                                                maxLines = 1,
+                                                color = Color.Black)
+                                        }
                                     }
                                 }
                             }
