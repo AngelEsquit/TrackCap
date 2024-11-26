@@ -1,12 +1,15 @@
 package com.example.trackcap.ui.cards.view
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
@@ -21,29 +24,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.trackcap.MyApp
+import com.example.trackcap.R
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.navigation.navigateTo
+import com.example.trackcap.ui.invest.repository.InvestRepository
+import com.example.trackcap.ui.invest.viewModel.InvestViewModel
+import com.example.trackcap.ui.invest.viewModel.InvestViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun homeScreen(navController: NavController) {
+fun homeScreen(navController: NavController, investViewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(
+    InvestRepository((navController.context.applicationContext as MyApp).database.activoItemDao())
+))) {
     val color0 = colorScheme.surfaceContainerLowest
     val color1 = colorScheme.outlineVariant
     val color2 = colorScheme.outline
     val color3 = colorScheme.tertiaryContainer
     val saldo by remember { mutableStateOf(0.00) }
     val movimientos = remember { mutableStateOf(listOf(Triple("Gasto 1", 10.00, color1), Triple("Ingreso 1", 100.00, color2), Triple("Gasto 2", 75.00, color1))) }
-    val activos = remember {
-        mutableStateOf(listOf(Triple("Activo 1", 100.00, color1), Triple("Activo 2", 200.00, color2), Triple("Activo 3", 150.00, color1)))
-    }
+    val activos = investViewModel.getLastThreeInvestments()
 
     Scaffold (
         topBar = { AppBarTop(title = "TrackCap", navController = navController, back = false) },
@@ -100,7 +110,6 @@ fun homeScreen(navController: NavController) {
                                     .weight(1f))
                         }
 
-
                         movimientos.value.forEach() { movimiento ->
                             Row (modifier = Modifier
                                 .fillMaxWidth()
@@ -147,7 +156,19 @@ fun homeScreen(navController: NavController) {
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .weight(1f))
-                            Text(text = "Monto",
+                            Text(text = "Monto Original",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .weight(1f))
+                            Text(text = "Monto Actual",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .weight(1f))
+                            Text(text = "Cambio",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
@@ -155,23 +176,45 @@ fun homeScreen(navController: NavController) {
                                     .weight(1f))
                         }
 
-
-                        activos.value.forEach() { activo ->
+                        activos.forEach { activo ->
                             Row (modifier = Modifier
                                 .fillMaxWidth()
-                                .background(activo.third)){
+                                .background(color = color1)
+                                .clickable { navController.navigate("invest") }) {
                                 Text(
-                                    text = activo.first,
+                                    text = activo.name,
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .weight(1f)
                                 )
                                 Text(
-                                    text = "Q " + "%.2f".format(activo.second),
+                                    text = "$ " + "%.2f".format(activo.originalAmount),
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .padding(8.dp)
+                                        .weight(1f)
+                                )
+                                Text(
+                                    text = "$ " + "%.2f".format(activo.currentAmount),
+                                    fontSize = 16.sp,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .weight(1f)
+                                )
+                                val change = activo.currentAmount - activo.originalAmount
+                                val changeIcon = when {
+                                    change > 0 -> R.drawable.ic_arrow_up
+                                    change < 0 -> R.drawable.ic_arrow_down
+                                    else -> R.drawable.ic_arrow_right
+                                }
+                                val iconSize = if (changeIcon == R.drawable.ic_arrow_right) 16.dp else 24.dp
+                                Image(
+                                    painter = painterResource(id = changeIcon),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .size(iconSize)
                                         .weight(1f)
                                 )
                             }
@@ -182,7 +225,6 @@ fun homeScreen(navController: NavController) {
         }
     }
 }
-
 @Preview
 @Composable
 fun homeScreenPreview() {

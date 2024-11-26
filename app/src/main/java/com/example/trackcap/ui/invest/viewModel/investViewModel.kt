@@ -27,6 +27,10 @@ class InvestViewModel(private val repository: InvestRepository) : ViewModel() {
         loadInvestments()
     }
 
+    fun getLastThreeInvestments(): List<Investment> {
+        return _investments.value.takeLast(3)
+    }
+
     private fun loadInvestments() {
         viewModelScope.launch {
             val investmentsFromDb = repository.getAllInvestments().map {
@@ -59,6 +63,8 @@ class InvestViewModel(private val repository: InvestRepository) : ViewModel() {
             }
         }
     }
+
+
 }
 
 class InvestViewModelFactory(private val repository: InvestRepository) : ViewModelProvider.Factory {
