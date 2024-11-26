@@ -25,6 +25,7 @@ import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
 import com.example.trackcap.ui.invest.view.InvestScreen
 import com.example.trackcap.ui.invest.view.AddInvestScreen
 import com.example.trackcap.ui.login.view.LoginScreen
+import com.example.trackcap.ui.resume.view.MoveListScreen
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -99,6 +100,10 @@ fun Navigation(navController: NavHostController, gastosViewModel: GastosViewMode
 
         composable(route = "addInvest") {
             AddInvestScreen(navController = navController)
+        }
+
+        composable(route = NavigationState.Resume.route) {
+            MoveListScreen(navController = navController, GastosViewModel = gastosViewModel, IngresosViewModel = ingresosViewModel)
         }
     }
 }

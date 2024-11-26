@@ -33,7 +33,7 @@ fun GastosListScreen(navController: NavController, GastosViewModel: GastosViewMo
     val gastosCategory = GastosViewModel.gastosByCategory.observeAsState()
 
     Scaffold(
-        topBar = { AppBarTop(title = "Ingresos de ${GastosViewModel.selectedCategory.value}", navController = navController) },
+        topBar = { AppBarTop(title = "Gastos de ${GastosViewModel.selectedCategory.value}", navController = navController) },
         bottomBar = { AppBarBottom(navController = navController) }
     ) { innerPadding ->
         LazyColumn(

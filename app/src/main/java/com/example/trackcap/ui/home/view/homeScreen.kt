@@ -22,9 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import kotlin.random.Random
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +48,6 @@ import com.example.trackcap.ui.gastos.viewModel.GastosViewModelFactory
 import com.example.trackcap.ui.ingresos.repositories.IngresosRepository
 import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
 import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModelFactory
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -121,7 +117,7 @@ fun homeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .clickable { navController.navigate("gastos") },
+                        .clickable { navigateTo(navController = navController, NavigationState.Resume.route) },
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
