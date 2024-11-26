@@ -25,6 +25,9 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
     private val _gasto = MutableLiveData<GastoItemEntity?>()
     val gasto: LiveData<GastoItemEntity?> = _gasto
 
+    private val _balance = MutableLiveData<Double>()
+    val balance: LiveData<Double> = _balance
+
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
@@ -48,6 +51,16 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
         viewModelScope.launch {
             try {
                 gastosRepository.insertItem(item)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun deleteItem(item: GastoItemEntity) {
+        viewModelScope.launch {
+            try {
+                gastosRepository.deleteItem(item)
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -96,6 +109,18 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
         viewModelScope.launch {
             try {
                 _gasto.postValue(gasto)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun calculateCardBalance(cardId: Int) {
+        viewModelScope.launch {
+            try {
+                val items = gastosRepository.getItemsByCardId(cardId)
+                val balance = items.sumOf { it.amount }
+                _balance.postValue(balance)
             } catch (e: Exception) {
                 handleException(e)
             }

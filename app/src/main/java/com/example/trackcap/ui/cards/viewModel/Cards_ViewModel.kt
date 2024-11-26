@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.trackcap.database.cards.CardItemEntity
+import com.example.trackcap.database.movimientos.gastos.GastoItemEntity
 import com.example.trackcap.ui.cards.repository.CardsRepository
 import kotlinx.coroutines.launch
 import java.io.IOException

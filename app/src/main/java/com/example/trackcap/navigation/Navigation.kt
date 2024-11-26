@@ -14,6 +14,7 @@ import com.example.trackcap.ui.cards.view.SelectCardScreen
 import com.example.trackcap.ui.cards.view.homeScreen
 import com.example.trackcap.ui.cards.viewModel.Cards_ViewModel
 import com.example.trackcap.ui.gastos.view.AddGastoScreen
+import com.example.trackcap.ui.gastos.view.GastosCard
 import com.example.trackcap.ui.ingresos.view.AddIngresoScreen
 import com.example.trackcap.ui.gastos.view.GastosScreen
 import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
@@ -64,6 +65,10 @@ fun Navigation(navController: NavHostController, gastosViewModel: GastosViewMode
 
         composable(route = NavigationState.DetailCard.route) {
             DetailCardScreen(navController = navController, cardsViewModel = cardsViewModel)
+        }
+
+        composable(route = NavigationState.GastosCard.route) {
+            GastosCard(navController = navController, gastosViewModel = gastosViewModel, cardsViewmodel = cardsViewModel)
         }
 
         composable(route = NavigationState.AddIngreso.route) {

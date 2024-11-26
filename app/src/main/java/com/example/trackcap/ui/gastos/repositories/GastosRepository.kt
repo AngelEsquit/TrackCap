@@ -14,6 +14,10 @@ class GastosRepository(private val gastoItemDao: GastoItemDao) {
         gastoItemDao.insert(item)
     }
 
+    suspend fun deleteItem(item: GastoItemEntity) {
+        gastoItemDao.delete(item)
+    }
+
     suspend fun getItemsByDate(date: Long): List<GastoItemEntity> = withContext(Dispatchers.IO) {
         gastoItemDao.getItemsByDate(date)
     }

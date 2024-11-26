@@ -1,6 +1,7 @@
 package com.example.trackcap.database.movimientos.gastos
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,6 +15,9 @@ interface GastoItemDao {
 
     @Update
     suspend fun update(item: GastoItemEntity)
+
+    @Delete
+    suspend fun delete(item: GastoItemEntity)
 
     @Query("SELECT * FROM gastos_items")
     fun getAllItems(): List<GastoItemEntity>

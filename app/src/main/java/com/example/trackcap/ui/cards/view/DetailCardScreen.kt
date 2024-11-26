@@ -73,14 +73,24 @@ fun DetailCardScreen(navController: NavController, cardsViewModel: Cards_ViewMod
                         Text("Monto a pagar: $balance")
                         Text("Fecha de pago: $payDateString")
                         Text("Fecha de vencimiento: $expiryDateString")
-
-                        Button(onClick = {
-                            if (card != null) {
-                                cardsViewModel.selectEditCard(card)
+                        Row {
+                            Button(onClick = { // Editar tarjeta
+                                if (card != null) {
+                                    cardsViewModel.selectEditCard(card)
+                                }
+                                navController.navigate(NavigationState.EditCard.route)
+                            }, modifier = Modifier.padding(top = 16.dp)) {
+                                Text("Editar")
                             }
-                            navController.navigate(NavigationState.EditCard.route)
-                        }, modifier = Modifier.padding(top = 16.dp)) {
-                            Text("Editar")
+
+                            Button(onClick = { // Ver gastos
+                                if (card != null) {
+                                    cardsViewModel.selectCard(card)
+                                }
+                                navController.navigate(NavigationState.GastosCard.route)
+                            }, modifier = Modifier.padding(top = 16.dp)) {
+                                Text("Ver gastos")
+                            }
                         }
 
                         Row(modifier = Modifier.fillMaxWidth()) {
