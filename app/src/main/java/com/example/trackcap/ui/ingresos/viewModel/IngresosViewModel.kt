@@ -98,6 +98,10 @@ class IngresosViewModel(private val ingresosRepository: IngresosRepository) : Vi
         }
     }
 
+    fun selectCategory(category: String) {
+        _selectedCategory.postValue(category)
+    }
+
     private fun handleException(exception: Exception) {
         when (exception) {
             is IOException -> _errorMessage.postValue("Network error: Check your internet connection.")

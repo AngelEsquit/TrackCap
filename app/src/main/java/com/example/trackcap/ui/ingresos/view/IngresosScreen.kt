@@ -1,6 +1,7 @@
 package com.example.trackcap.ui.ingresos.view
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
+import com.example.trackcap.navigation.navigateTo
 import com.example.trackcap.ui.charts.view.ringChart
 import com.example.trackcap.ui.common.view.floatingButton
 import com.example.trackcap.ui.common.view.listSelector
@@ -110,7 +112,12 @@ fun IngresosScreen(navController: NavController, ingresosViewModel: IngresosView
                             row.forEach { categoria ->
                                 Card (modifier = Modifier
                                     .weight(1f)
-                                    .height(40.dp) ) {
+                                    .height(40.dp)
+                                    .clickable {
+                                        ingresosViewModel.selectCategory(categoria.first)
+                                        navigateTo(navController, NavigationState.IngresosCategory.route)
+                                    }
+                                ) {
                                     Box (modifier = Modifier
                                         .padding(8.dp)
                                         .fillMaxSize()

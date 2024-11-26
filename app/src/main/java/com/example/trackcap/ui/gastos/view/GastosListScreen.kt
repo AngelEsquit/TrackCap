@@ -1,4 +1,4 @@
-package com.example.trackcap.ui.ingresos.view
+package com.example.trackcap.ui.gastos.view
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,21 +19,21 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
-import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
+import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun IngresosListScreen(navController: NavController, IngresosViewModel: IngresosViewModel) {
+fun GastosListScreen(navController: NavController, GastosViewModel: GastosViewModel) {
     LaunchedEffect(Unit) {
-        IngresosViewModel.getAllItems()
-        IngresosViewModel.selectedCategory.value?.let { IngresosViewModel.getItemsByCategory(it) }
+        GastosViewModel.getAllItems()
+        GastosViewModel.selectedCategory.value?.let { GastosViewModel.getGastosByCategory(it) }
     }
 
-    val ingresosCategory = IngresosViewModel.ingresosByCategory.observeAsState()
+    val gastosCategory = GastosViewModel.gastosByCategory.observeAsState()
 
     Scaffold(
-        topBar = { AppBarTop(title = "Ingresos de ${IngresosViewModel.selectedCategory.value}", navController = navController) },
+        topBar = { AppBarTop(title = "Ingresos de ${GastosViewModel.selectedCategory.value}", navController = navController) },
         bottomBar = { AppBarBottom(navController = navController) }
     ) { innerPadding ->
         LazyColumn(
@@ -82,11 +82,11 @@ fun IngresosListScreen(navController: NavController, IngresosViewModel: Ingresos
                 HorizontalDivider(color = Color.LightGray, thickness = 1.dp)
             }
 
-            val ingresos = ingresosCategory.value ?: emptyList()
+            val gastos = gastosCategory.value ?: emptyList()
 
-            items(ingresos) { ingreso ->
+            items(gastos) { gasto ->
                 val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                val date = Instant.ofEpochMilli(ingreso.date).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+                val date = Instant.ofEpochMilli(gasto.date).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
                 val formattedDate = date.format(formatter)
 
                 Row(
@@ -95,17 +95,17 @@ fun IngresosListScreen(navController: NavController, IngresosViewModel: Ingresos
                         .padding(vertical = 8.dp)
                 ) {
                     Text(
-                        text = ingreso.name,
+                        text = gasto.name,
                         modifier = Modifier.weight(1f).padding(4.dp),
                         fontSize = 14.sp
                     )
                     Text(
-                        text = ingreso.category,
+                        text = gasto.category,
                         modifier = Modifier.weight(1f).padding(4.dp),
                         fontSize = 14.sp
                     )
                     Text(
-                        text = ingreso.amount.toString(),
+                        text = gasto.amount.toString(),
                         modifier = Modifier.weight(1f).padding(4.dp),
                         fontSize = 14.sp
                     )
@@ -116,8 +116,8 @@ fun IngresosListScreen(navController: NavController, IngresosViewModel: Ingresos
                     )
                     Button(
                         onClick = {
-                            IngresosViewModel.deleteItem(ingreso)
-                            IngresosViewModel.selectedCategory.value?.let { IngresosViewModel.getItemsByCategory(it) }
+                            GastosViewModel.deleteItem(gasto)
+                            GastosViewModel.selectedCategory.value?.let { GastosViewModel.getGastosByCategory(it) }
                         },
                         modifier = Modifier.weight(1f).padding(4.dp)
                     ) {

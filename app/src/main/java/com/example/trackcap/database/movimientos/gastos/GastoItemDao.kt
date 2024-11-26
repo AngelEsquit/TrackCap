@@ -28,6 +28,9 @@ interface GastoItemDao {
     @Query("SELECT * FROM gastos_items WHERE cardId = :cardId")
     fun getItemsByCardId(cardId: Int): List<GastoItemEntity>
 
+    @Query("SELECT * FROM gastos_items WHERE category = :category")
+    fun getItemsByCategory(category: String): List<GastoItemEntity>
+
     @Query("SELECT SUM(amount) FROM gastos_items")
     fun getTotalGastos(): Double
 }

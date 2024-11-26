@@ -29,4 +29,8 @@ class GastosRepository(private val gastoItemDao: GastoItemDao) {
     suspend fun getTotalGastos(): Double = withContext(Dispatchers.IO) {
         gastoItemDao.getTotalGastos()
     }
+
+    suspend fun getGastosByCategory(category: String): List<GastoItemEntity> = withContext(Dispatchers.IO) {
+        gastoItemDao.getItemsByCategory(category)
+    }
 }

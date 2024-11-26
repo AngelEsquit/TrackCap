@@ -15,4 +15,6 @@ sealed class NavigationState(val route: String) {
     data object EditCard: NavigationState("editCard")
     data object DetailCard: NavigationState("detailCard")
     data object GastosCard: NavigationState("gastosCard")
+    data object IngresosCategory: NavigationState("ingresosCategory")
+    data object GastosCategory: NavigationState("gastosCategory")
 }

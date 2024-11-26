@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.trackcap.database.movimientos.gastos.GastoItemEntity
+import com.example.trackcap.database.movimientos.ingresos.IngresoItemEntity
 import com.example.trackcap.ui.gastos.repositories.GastosRepository
 import com.example.trackcap.ui.ingresos.repositories.IngresosRepository
 import kotlinx.coroutines.launch
@@ -38,6 +39,12 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
 
     private val _balance = MutableLiveData<Double>()
     val balance: LiveData<Double> = _balance
+
+    private val _gastosByCategory = MutableLiveData<List<GastoItemEntity>>()
+    val gastosByCategory: LiveData<List<GastoItemEntity>> = _gastosByCategory
+
+    private val _selectedCategory = MutableLiveData<String>()
+    val selectedCategory: LiveData<String> = _selectedCategory
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
@@ -76,6 +83,29 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
         viewModelScope.launch {
             try {
                 gastosRepository.deleteItem(item)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun selectCategory(category: String) {
+        viewModelScope.launch {
+            try {
+                _selectedCategory.postValue(category)
+                val items = gastosRepository.getGastosByCategory(category)
+                _gastosByCategory.postValue(items)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun getGastosByCategory(category: String) {
+        viewModelScope.launch {
+            try {
+                val items = gastosRepository.getGastosByCategory(category)
+                _gastosByCategory.postValue(items)
             } catch (e: Exception) {
                 handleException(e)
             }
