@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,7 +46,7 @@ fun InvestScreen(
                 Button(
                     onClick = { navController.navigate("addInvest") },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    colors = ButtonDefaults.buttonColors(containerColor = colorScheme.tertiaryContainer)
                 ) {
                     Text(text = "Agregar activo", color = Color.Black)
                 }
@@ -139,7 +140,7 @@ fun InvestScreen(
                                         .padding(8.dp)
                                         .weight(1f)
                                 )
-                                val change = investment.currentAmount - investment.originalAmount + Random.nextDouble(-0.3, 0.4)
+                                val change = investment.originalAmount - investment.originalAmount
                                 val changeIcon = when {
                                     change > 0 -> R.drawable.ic_arrow_up
                                     change < 0 -> R.drawable.ic_arrow_down
