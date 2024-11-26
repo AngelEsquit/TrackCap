@@ -21,4 +21,12 @@ class CardsRepository (private val cardItemDao: CardItemDao) {
     suspend fun updateItem(item: CardItemEntity) {
         cardItemDao.update(item)
     }
+
+    suspend fun getItemById(id: Int): CardItemEntity {
+        return cardItemDao.getItemById(id)
+    }
+
+    suspend fun updateBalance(id: Int, balance: Double) {
+        cardItemDao.updateBalance(id, balance)
+    }
 }

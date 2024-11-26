@@ -89,6 +89,27 @@ class Cards_ViewModel (private val cardsRepository: CardsRepository) : ViewModel
         }
     }
 
+    fun getItemById(id: Int) {
+        viewModelScope.launch {
+            try {
+                val item = cardsRepository.getItemById(id)
+                _selectedCard.postValue(item)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun updateBalance(id: Int, balance: Double) {
+        viewModelScope.launch {
+            try {
+                cardsRepository.updateBalance(id, balance)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
     private fun handleException(exception: Exception) {
         when (exception) {
             is IOException -> _errorMessage.postValue("Network error: Check your internet connection.")

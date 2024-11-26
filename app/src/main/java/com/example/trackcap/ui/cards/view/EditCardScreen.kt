@@ -112,6 +112,7 @@ fun EditCardScreen(navController: NavController, card: CardItemEntity, cardsView
                             balance = balance.toDouble())
 
                         cardsViewModel.updateCard(newCard)
+                        cardsViewModel.selectCard(newCard)
                         navController.popBackStack()
                     },
                     modifier = Modifier.fillMaxWidth()

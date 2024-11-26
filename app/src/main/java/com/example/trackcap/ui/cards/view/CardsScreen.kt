@@ -65,8 +65,8 @@ fun CardsScreen(navController: NavController, cardsViewModel: Cards_ViewModel) {
                         .fillMaxWidth()
                         .padding(top = 8.dp)
                         .clickable {
-                            cardsViewModel.selectEditCard(card)
-                            navController.navigate(NavigationState.EditCard.route)
+                            cardsViewModel.selectCard(card)
+                            navController.navigate(NavigationState.DetailCard.route)
                         }
                 ) {
                     Row(
@@ -80,6 +80,7 @@ fun CardsScreen(navController: NavController, cardsViewModel: Cards_ViewModel) {
                         )
                         Column {
                             Text(text = card.name)
+                            Text(text = "Saldo a pagar: ${card.balance}")
                         }
                     }
                 }

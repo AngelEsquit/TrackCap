@@ -63,7 +63,8 @@ fun SelectCardScreen(navController: NavController, cardsViewModel: Cards_ViewMod
                                 cardId = card.id)
 
                             gastosViewModel.insertItem(gasto)
-
+                            val newBalance = card.balance + gastosViewModel.gasto.value!!.amount
+                            cardsViewModel.updateBalance(card.id, newBalance)
                             navigateTo(navController, NavigationState.Gastos.route, NavigationState.SelectCard.route)
                         }
                 ) {
