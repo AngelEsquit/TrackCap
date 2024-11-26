@@ -75,14 +75,12 @@ fun homeScreen(
     val totalGastos by gastosViewModel.totalGastos.observeAsState(0.0)
     val saldo = totalIngresos - totalGastos
 
-    val movimientos = remember { mutableStateOf(listOf(Triple("Gasto 1", 10.00, color1), Triple("Ingreso 1", 100.00, color2), Triple("Gasto 2", 75.00, color1))) }
-    val activos = investViewModel.getLastThreeInvestments()
-
-    val coroutineScope = rememberCoroutineScope()
+    val lastThreeGastos = gastosViewModel.gastos.observeAsState(emptyList()).value.takeLast(3)
 
     LaunchedEffect(Unit) {
         ingresosViewModel.calculateTotalIngresos()
         gastosViewModel.calculateTotalGastos()
+        gastosViewModel.getAllItems()
     }
 
     Scaffold(
@@ -118,12 +116,22 @@ fun homeScreen(
             }
 
             item {
-                Row {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .clickable { navController.navigate("gastos") },
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Text(
                         text = "Últimos movimientos",
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(16.dp)
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Ver todos",
+                        fontSize = 16.sp,
+                        color = colorScheme.primary
                     )
                 }
 
@@ -157,21 +165,21 @@ fun homeScreen(
                             )
                         }
 
-                        movimientos.value.forEach { movimiento ->
+                        lastThreeGastos.forEach { gasto ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(movimiento.third)
+                                    .background(color1)
                             ) {
                                 Text(
-                                    text = movimiento.first,
+                                    text = gasto.name,
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .weight(1f)
                                 )
                                 Text(
-                                    text = "Q " + "%.2f".format(movimiento.second),
+                                    text = "Q " + "%.2f".format(gasto.amount),
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -239,11 +247,12 @@ fun homeScreen(
                             )
                         }
 
+                        val activos = investViewModel.getLastThreeInvestments()
                         activos.forEach { activo ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(color = color1)
+                                    .background(color1)
                                     .clickable { navController.navigate("invest") }
                             ) {
                                 Text(

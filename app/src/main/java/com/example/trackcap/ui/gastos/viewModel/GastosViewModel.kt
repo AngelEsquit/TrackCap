@@ -58,6 +58,10 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
         }
     }
 
+    fun getLastThreeGastos(): List<GastoItemEntity> {
+        return _gastos.value?.takeLast(3) ?: emptyList()
+    }
+
     fun insertItem(item: GastoItemEntity) {
         viewModelScope.launch {
             try {
