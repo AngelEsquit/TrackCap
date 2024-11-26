@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.trackcap.database.AppDatabase
+import com.example.trackcap.ui.cards.repository.CardsRepository
 import com.example.trackcap.ui.gastos.repositories.GastosRepository
 import com.example.trackcap.ui.ingresos.repositories.IngresosRepository
 
@@ -15,6 +16,9 @@ class MyApp : Application() {
         private set
 
     lateinit var ingresosRepository: IngresosRepository
+        private set
+
+    lateinit var cardsRepository: CardsRepository
         private set
 
     override fun onCreate() {
@@ -33,6 +37,10 @@ class MyApp : Application() {
 
         ingresosRepository = IngresosRepository(
             database.ingresoItemDao()
+        )
+
+        cardsRepository = CardsRepository(
+            database.cardItemDao()
         )
     }
 }

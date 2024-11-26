@@ -18,28 +18,7 @@ class GastosRepository(private val gastoItemDao: GastoItemDao) {
         gastoItemDao.getItemsByDate(date)
     }
 
-    /*
-    suspend fun getAllItems(): List<SupermarketItemEntity> = withContext(Dispatchers.IO) {
-        supermarketItemDao.getAllItems()
+    suspend fun getItemsByCardId(cardId: Int): List<GastoItemEntity> = withContext(Dispatchers.IO) {
+        gastoItemDao.getItemsByCardId(cardId)
     }
-
-    suspend fun insertItem(item: SupermarketItemEntity) {
-        supermarketItemDao.insert(item)
-    }
-
-    suspend fun updateItem(item: SupermarketItemEntity) {
-        supermarketItemDao.update(item)
-        getAllItems()
-    }
-
-    suspend fun deleteItem(path: String) {
-        supermarketItemDao.delete(path)
-        getAllItems()
-    }
-
-    fun getItemByAtributes(itemName: String, quantity: String, imagePath: String): SupermarketItemEntity {
-        return supermarketItemDao.getItemByAtributes(itemName, quantity, imagePath)
-    }
-
-     */
 }

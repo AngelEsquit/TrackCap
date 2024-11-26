@@ -16,11 +16,11 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
     private val _gastos = MutableLiveData<List<GastoItemEntity>>()
     val gastos: LiveData<List<GastoItemEntity>> = _gastos
 
-    private val _gastosCategories = MutableLiveData<List<Pair<String, Float>>>()
-    val gastosCategories: LiveData<List<Pair<String, Float>>> = _gastosCategories
-
     private val _gastosByDate = MutableLiveData<List<Pair<String, Float>>>()
     val gastosByDate: LiveData<List<Pair<String, Float>>> = _gastosByDate
+
+    private val _gastosByCardId = MutableLiveData<List<GastoItemEntity>>()
+    val gastosByCardId: LiveData<List<GastoItemEntity>> = _gastosByCardId
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
@@ -58,6 +58,19 @@ class GastosViewModel (private val gastosRepository: GastosRepository): ViewMode
                     .groupBy { it.category }
                     .map { Pair(it.key, it.value.sumOf { item -> item.amount }.toFloat()) }
                 _gastosByDate.postValue(items)
+            } catch (e: Exception) {
+                handleException(e)
+            } finally {
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
+    fun getItemsByCardId(cardId: Int) {
+        viewModelScope.launch {
+            try {
+                val items = gastosRepository.getItemsByCardId(cardId)
+                _gastosByCardId.postValue(items)
             } catch (e: Exception) {
                 handleException(e)
             } finally {

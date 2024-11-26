@@ -15,17 +15,11 @@ data class CardItemEntity(
     val name: String,
 
     @ColumnInfo(name = "paymentDate")
-    val paydate: Long,
+    val payDate: Long,
 
     @ColumnInfo(name = "expiryDate")
     val expiryDate: Long,
 
     @ColumnInfo(name = "balance")
-    val balance: Double,
-
-    @ColumnInfo(name = "cardType")
-    val cardType: String, // Tipo de tarjeta (crédito, débito, etc.)
-
-    @ColumnInfo(name = "creditLimit")
-    val creditLimit: Double?, // Límite de crédito (puede ser nulo para tarjetas de débito)
+    val balance: Double
 )

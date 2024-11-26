@@ -9,18 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -28,19 +22,16 @@ import com.example.trackcap.R
 import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
+import com.example.trackcap.navigation.navigateTo
 import com.example.trackcap.ui.cards.viewModel.Cards_ViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CardsScreen(navController: NavController, cardsViewModel: Cards_ViewModel) {
-    val cards = cardsViewModel.cards.observeAsState(initial = emptyList())
-
-    LaunchedEffect(Unit) {
-        cardsViewModel.getAllItems()
-    }
+fun SelectCardScreen(navController: NavController, viewModel: Cards_ViewModel) {
+    val cards = viewModel.cards.observeAsState(initial = emptyList())
 
     Scaffold(
-        topBar = { AppBarTop(title = "Tarjetas", navController = navController) },
+        topBar = { AppBarTop(title = "Seleccionar tarjeta", navController = navController) },
         bottomBar = { AppBarBottom(navController = navController) }
     ) { innerPadding ->
         LazyColumn(
@@ -49,37 +40,34 @@ fun CardsScreen(navController: NavController, cardsViewModel: Cards_ViewModel) {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            item {
-                Button(
-                    onClick = { navController.navigate("addCard") },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorScheme.tertiaryContainer)
-                ) {
-                    Text(text = "Agregar tarjeta", color = Color.Black)
-                }
-            }
-
             items(cards.value) { card ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp)
+                        .padding(vertical = 8.dp)
                         .clickable {
-                            cardsViewModel.selectEditCard(card)
-                            navController.navigate(NavigationState.EditCard.route)
+                            viewModel.selectCard(card)
+                            navigateTo(
+                                navController,
+                                NavigationState.Gastos.route,
+                                NavigationState.AddGasto.route
+                            )
                         }
                 ) {
                     Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.img_card),
-                            contentDescription = "Card icon",
-                            modifier = Modifier.padding(end = 16.dp)
-                        )
-                        Column {
+                        Image(painter = painterResource(id = R.drawable.img_card), contentDescription = null)
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 16.dp)
+                        ) {
                             Text(text = card.name)
+                            Text(text = "Vence: ${card.expiryDate}")
+                            Text(text = "Pago: ${card.payDate}")
                         }
                     }
                 }

@@ -9,8 +9,9 @@ import androidx.navigation.compose.composable
 import com.example.trackcap.ui.cards.view.AddCardScreen
 import com.example.trackcap.ui.cards.view.CardsScreen
 import com.example.trackcap.ui.cards.view.EditCardScreen
+import com.example.trackcap.ui.cards.view.SelectCardScreen
 import com.example.trackcap.ui.cards.view.homeScreen
-import com.example.trackcap.ui.cards.viewModel.CardsViewModel
+import com.example.trackcap.ui.cards.viewModel.Cards_ViewModel
 import com.example.trackcap.ui.gastos.view.AddGastoScreen
 import com.example.trackcap.ui.ingresos.view.AddIngresoScreen
 import com.example.trackcap.ui.gastos.view.GastosScreen
@@ -23,7 +24,7 @@ import com.example.trackcap.ui.login.view.LoginScreen
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun Navigation(navController: NavHostController, gastosViewModel: GastosViewModel, ingresosViewModel: IngresosViewModel, viewModel: CardsViewModel, modifier: Modifier = Modifier) {
+fun Navigation(navController: NavHostController, gastosViewModel: GastosViewModel, ingresosViewModel: IngresosViewModel, cardsViewModel: Cards_ViewModel, modifier: Modifier = Modifier) {
     NavHost(navController = navController,
         startDestination = NavigationState.Login.route,
         modifier = modifier) {
@@ -45,21 +46,19 @@ fun Navigation(navController: NavHostController, gastosViewModel: GastosViewMode
         }
 
         composable(route = NavigationState.Cards.route) {
-            CardsScreen(navController = navController, viewModel = viewModel)
+            CardsScreen(navController = navController, cardsViewModel = cardsViewModel)
         }
 
         composable("addCard") {
-            AddCardScreen(navController = navController) { card ->
-                viewModel.addCard(card)
-            }
+            AddCardScreen(navController = navController, Cards_ViewModel = cardsViewModel)
         }
 
-        composable("editCard/{cardName}") { backStackEntry ->
-            val cardName = backStackEntry.arguments?.getString("cardName")
-            val card = viewModel.cards.value.find { it.name == cardName }
-            if (card != null) {
-                EditCardScreen(navController = navController, card = card, onUpdateCard = viewModel::updateCard, onDeleteCard = viewModel::deleteCard)
-            }
+        composable(route = NavigationState.SelectCard.route) {
+            SelectCardScreen(navController = navController, viewModel = cardsViewModel)
+        }
+
+        composable(route = NavigationState.EditCard.route) {
+            EditCardScreen(navController = navController, cardsViewModel = cardsViewModel, card = cardsViewModel.selectedEditCard.value!!)
         }
 
         composable(route = NavigationState.AddIngreso.route) {

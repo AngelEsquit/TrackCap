@@ -7,17 +7,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import com.example.trackcap.navigation.Navigation
+import com.example.trackcap.ui.cards.viewModel.Cards_ViewModel
 import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
 import com.example.trackcap.ui.gastos.viewModel.GastosViewModelFactory
 import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
 import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModelFactory
-import com.example.trackcap.ui.cards.viewModel.CardsViewModel
+import com.example.trackcap.ui.cards.viewModel.CardsViewModelFactory
 import com.example.trackcap.ui.theme.TrackCapTheme
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var gastosViewModel: GastosViewModel
     private lateinit var ingresosViewModel: IngresosViewModel
+    private lateinit var cardsViewModel: Cards_ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +36,17 @@ class MainActivity : ComponentActivity() {
             GastosViewModelFactory(gastosRepository)
         )[GastosViewModel::class.java]
 
-        val cardsViewModel = ViewModelProvider(this)[CardsViewModel::class.java]
+        val cardsRepository = (applicationContext as MyApp).cardsRepository
+        cardsViewModel = ViewModelProvider(
+            this,
+            CardsViewModelFactory(cardsRepository)
+        )[Cards_ViewModel::class.java]
 
         enableEdgeToEdge()
         setContent {
             TrackCapTheme {
                 val navController = rememberNavController()
-                Navigation(navController = navController, gastosViewModel = gastosViewModel, ingresosViewModel = ingresosViewModel, viewModel = cardsViewModel)
+                Navigation(navController = navController, gastosViewModel = gastosViewModel, ingresosViewModel = ingresosViewModel, cardsViewModel = cardsViewModel)
             }
         }
     }

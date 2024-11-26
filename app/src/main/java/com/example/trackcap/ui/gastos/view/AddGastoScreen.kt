@@ -53,8 +53,13 @@ fun AddGastoScreen(navController: NavController, GastosViewModel: GastosViewMode
                         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
                         val localDate = LocalDate.parse(date, formatter)
                         val timestamp = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                        GastosViewModel.addGasto(name, amount.toDouble(), category, timestamp, paymentMethod)
-                        navigateTo(navController, NavigationState.Gastos.route, popUpToRoute = NavigationState.AddIngreso.route)
+
+                        if (paymentMethod == "Tarjeta de crédito") {
+                            navigateTo(navController, NavigationState.SelectCard.route, popUpToRoute = NavigationState.AddGasto.route)
+                        } else {
+                            GastosViewModel.addGasto(name, amount.toDouble(), category, timestamp, paymentMethod)
+                            navigateTo(navController, NavigationState.Gastos.route, popUpToRoute = NavigationState.AddGasto.route)
+                        }
                     }
                 },
                 modifier = Modifier.padding(16.dp)
