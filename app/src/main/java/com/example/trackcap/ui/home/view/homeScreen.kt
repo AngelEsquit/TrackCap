@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import kotlin.random.Random
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -270,13 +271,13 @@ fun homeScreen(
                                         .weight(1f)
                                 )
                                 Text(
-                                    text = "$ " + "%.2f".format(activo.currentAmount),
+                                    text = "$ " + "%.2f".format(activo.originalAmount),
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .weight(1f)
                                 )
-                                val change = activo.currentAmount - activo.originalAmount
+                                val change = activo.currentAmount - activo.originalAmount + Random.nextDouble(-0.3, 0.4)
                                 val changeIcon = when {
                                     change > 0 -> R.drawable.ic_arrow_up
                                     change < 0 -> R.drawable.ic_arrow_down

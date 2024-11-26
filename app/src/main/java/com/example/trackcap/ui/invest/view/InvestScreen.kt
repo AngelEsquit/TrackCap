@@ -24,6 +24,7 @@ import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.ui.invest.viewModel.InvestViewModel
 import com.example.trackcap.ui.invest.repository.InvestRepository
 import com.example.trackcap.ui.invest.viewModel.InvestViewModelFactory
+import kotlin.random.Random
 
 @Composable
 fun InvestScreen(
@@ -131,14 +132,14 @@ fun InvestScreen(
                                         .weight(1f)
                                 )
                                 Text(
-                                    text = "$ " + "%.2f".format(investment.currentAmount),
+                                    text = "$ " + "%.2f".format(investment.originalAmount),
                                     fontSize = 16.sp,
                                     color = Color.Black,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .weight(1f)
                                 )
-                                val change = investment.currentAmount - investment.originalAmount
+                                val change = investment.currentAmount - investment.originalAmount + Random.nextDouble(-0.3, 0.4)
                                 val changeIcon = when {
                                     change > 0 -> R.drawable.ic_arrow_up
                                     change < 0 -> R.drawable.ic_arrow_down
