@@ -18,9 +18,12 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,82 +41,128 @@ import com.example.trackcap.navigation.AppBarBottom
 import com.example.trackcap.navigation.AppBarTop
 import com.example.trackcap.navigation.NavigationState
 import com.example.trackcap.navigation.navigateTo
+import com.example.trackcap.ui.gastos.repositories.GastosRepository
 import com.example.trackcap.ui.invest.repository.InvestRepository
 import com.example.trackcap.ui.invest.viewModel.InvestViewModel
 import com.example.trackcap.ui.invest.viewModel.InvestViewModelFactory
+import com.example.trackcap.ui.gastos.viewModel.GastosViewModel
+import com.example.trackcap.ui.gastos.viewModel.GastosViewModelFactory
+import com.example.trackcap.ui.ingresos.repositories.IngresosRepository
+import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModel
+import com.example.trackcap.ui.ingresos.viewModel.IngresosViewModelFactory
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun homeScreen(navController: NavController, investViewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(
-    InvestRepository((navController.context.applicationContext as MyApp).database.activoItemDao())
-))) {
+fun homeScreen(
+    navController: NavController,
+    investViewModel: InvestViewModel = viewModel(factory = InvestViewModelFactory(
+        InvestRepository((navController.context.applicationContext as MyApp).database.activoItemDao())
+    )),
+    ingresosViewModel: IngresosViewModel = viewModel(factory = IngresosViewModelFactory(
+        IngresosRepository((navController.context.applicationContext as MyApp).database.ingresoItemDao())
+    )),
+    gastosViewModel: GastosViewModel = viewModel(factory = GastosViewModelFactory(
+        GastosRepository((navController.context.applicationContext as MyApp).database.gastoItemDao())
+    ))
+) {
     val color0 = colorScheme.surfaceContainerLowest
     val color1 = colorScheme.outlineVariant
     val color2 = colorScheme.outline
     val color3 = colorScheme.tertiaryContainer
-    val saldo by remember { mutableStateOf(0.00) }
+
+    val totalIngresos by ingresosViewModel.totalIngresos.observeAsState(0.0)
+    val totalGastos by gastosViewModel.totalGastos.observeAsState(0.0)
+    val saldo = totalIngresos - totalGastos
+
     val movimientos = remember { mutableStateOf(listOf(Triple("Gasto 1", 10.00, color1), Triple("Ingreso 1", 100.00, color2), Triple("Gasto 2", 75.00, color1))) }
     val activos = investViewModel.getLastThreeInvestments()
 
-    Scaffold (
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        ingresosViewModel.calculateTotalIngresos()
+        gastosViewModel.calculateTotalGastos()
+    }
+
+    Scaffold(
         topBar = { AppBarTop(title = "TrackCap", navController = navController, back = false) },
         bottomBar = { AppBarBottom(navController = navController) }
     ) { innerPadding ->
-        LazyColumn (
+        LazyColumn(
             contentPadding = innerPadding
         ) {
             item {
-                Row (modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                    horizontalArrangement = Arrangement.Center) {
-                    Column (modifier = Modifier
-                        .wrapContentSize(Alignment.Center)) {
-                        Text(text = "Saldo",
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Column(
+                        modifier = Modifier.wrapContentSize(Alignment.Center)
+                    ) {
+                        Text(
+                            text = "Saldo",
                             fontSize = 35.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.align(Alignment.CenterHorizontally))
-                        Text(text = "Q " + "%.2f".format(saldo),
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                        Text(
+                            text = "Q " + "%.2f".format(saldo),
                             fontSize = 28.sp,
-                            modifier = Modifier.align(Alignment.CenterHorizontally))
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
                     }
                 }
             }
 
             item {
                 Row {
-                    Text(text = "Últimos movimientos",
+                    Text(
+                        text = "Últimos movimientos",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(16.dp))
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
 
-                Column (modifier = Modifier
-                    .wrapContentSize(Alignment.Center)
-                    .padding(horizontal = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier
+                        .wrapContentSize(Alignment.Center)
+                        .padding(horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Column {
-                        Row (modifier = Modifier
-                            .fillMaxWidth()
-                            .background(color = color0)){
-                            Text(text = "Movimiento",
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(color = color0)
+                        ) {
+                            Text(
+                                text = "Movimiento",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .weight(1f))
-                            Text(text = "Monto",
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "Monto",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .weight(1f))
+                                    .weight(1f)
+                            )
                         }
 
-                        movimientos.value.forEach() { movimiento ->
-                            Row (modifier = Modifier
-                                .fillMaxWidth()
-                                .background(movimiento.third)){
+                        movimientos.value.forEach { movimiento ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(movimiento.third)
+                            ) {
                                 Text(
                                     text = movimiento.first,
                                     fontSize = 16.sp,
@@ -136,51 +185,67 @@ fun homeScreen(navController: NavController, investViewModel: InvestViewModel = 
 
             item {
                 Row {
-                    Text(text = "Activos",
+                    Text(
+                        text = "Activos",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(16.dp))
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
 
-                Column (modifier = Modifier
-                    .wrapContentSize(Alignment.Center)
-                    .padding(horizontal = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier
+                        .wrapContentSize(Alignment.Center)
+                        .padding(horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Column {
-                        Row (modifier = Modifier
-                            .fillMaxWidth()
-                            .background(color = color0)){
-                            Text(text = "Activo",
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(color = color0)
+                        ) {
+                            Text(
+                                text = "Activo",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .weight(1f))
-                            Text(text = "Monto Original",
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "Monto Original",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .weight(1f))
-                            Text(text = "Monto Actual",
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "Monto Actual",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .weight(1f))
-                            Text(text = "Cambio",
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "Cambio",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .weight(1f))
+                                    .weight(1f)
+                            )
                         }
 
                         activos.forEach { activo ->
-                            Row (modifier = Modifier
-                                .fillMaxWidth()
-                                .background(color = color1)
-                                .clickable { navController.navigate("invest") }) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(color = color1)
+                                    .clickable { navController.navigate("invest") }
+                            ) {
                                 Text(
                                     text = activo.name,
                                     fontSize = 16.sp,
@@ -225,6 +290,7 @@ fun homeScreen(navController: NavController, investViewModel: InvestViewModel = 
         }
     }
 }
+
 @Preview
 @Composable
 fun homeScreenPreview() {

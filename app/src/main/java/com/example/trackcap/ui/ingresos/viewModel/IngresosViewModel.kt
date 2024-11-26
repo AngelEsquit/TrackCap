@@ -25,6 +25,16 @@ class IngresosViewModel(private val ingresosRepository: IngresosRepository) : Vi
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _totalIngresos = MutableLiveData<Double>()
+    val totalIngresos: LiveData<Double> = _totalIngresos
+
+    fun calculateTotalIngresos() {
+        viewModelScope.launch {
+            val total = ingresosRepository.getTotalIngresos()
+            _totalIngresos.postValue(total)
+        }
+    }
+
     fun getAllItems() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

@@ -31,4 +31,7 @@ interface IngresoItemDao {
     @Query("SELECT * FROM supermarket_items WHERE itemName = :itemName AND quantity = :quantity AND imagePath = :imagePath")
     fun getItemByAtributes(itemName: String, quantity: String, imagePath: String): SupermarketItemEntity
      */
+
+    @Query("SELECT SUM(amount) FROM ingresos_items")
+    fun getTotalIngresos(): Double
 }

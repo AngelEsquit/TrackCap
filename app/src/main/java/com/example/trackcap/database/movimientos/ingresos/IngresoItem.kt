@@ -22,4 +22,6 @@ data class IngresoItemEntity(
 
     @ColumnInfo(name = "date")
     val date: Long
+
+
 )

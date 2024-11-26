@@ -17,4 +17,7 @@ class IngresosRepository (private val ingresoItemDao: IngresoItemDao) {
     suspend fun getItemsByDate(date: Long): List<IngresoItemEntity> = withContext(Dispatchers.IO) {
         ingresoItemDao.getItemsByDate(date)
     }
+    suspend fun getTotalIngresos(): Double = withContext(Dispatchers.IO) {
+        ingresoItemDao.getTotalIngresos()
+    }
 }

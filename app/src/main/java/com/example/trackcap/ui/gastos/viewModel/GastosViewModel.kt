@@ -8,10 +8,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.trackcap.database.movimientos.gastos.GastoItemEntity
 import com.example.trackcap.ui.gastos.repositories.GastosRepository
+import com.example.trackcap.ui.ingresos.repositories.IngresosRepository
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 class GastosViewModel (private val gastosRepository: GastosRepository): ViewModel() {
+
+    private val _totalGastos = MutableLiveData<Double>()
+    val totalGastos: LiveData<Double> = _totalGastos
+
+    fun calculateTotalGastos() {
+        viewModelScope.launch {
+            val total = gastosRepository.getTotalGastos()
+            _totalGastos.postValue(total)
+        }
+    }
 
     private val _gastos = MutableLiveData<List<GastoItemEntity>>()
     val gastos: LiveData<List<GastoItemEntity>> = _gastos
