@@ -234,14 +234,6 @@ fun homeScreen(
                                     .padding(8.dp)
                                     .weight(1f)
                             )
-                            Text(
-                                text = "Cambio",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .weight(1f)
-                            )
                         }
 
                         val activos = investViewModel.getLastThreeInvestments()
@@ -271,21 +263,6 @@ fun homeScreen(
                                     fontSize = 16.sp,
                                     modifier = Modifier
                                         .padding(8.dp)
-                                        .weight(1f)
-                                )
-                                val change = activo.currentAmount - activo.originalAmount + Random.nextDouble(-0.3, 0.4)
-                                val changeIcon = when {
-                                    change > 0 -> R.drawable.ic_arrow_up
-                                    change < 0 -> R.drawable.ic_arrow_down
-                                    else -> R.drawable.ic_arrow_right
-                                }
-                                val iconSize = if (changeIcon == R.drawable.ic_arrow_right) 16.dp else 24.dp
-                                Image(
-                                    painter = painterResource(id = changeIcon),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .size(iconSize)
                                         .weight(1f)
                                 )
                             }
