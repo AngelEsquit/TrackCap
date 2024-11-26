@@ -14,9 +14,18 @@ class IngresosRepository (private val ingresoItemDao: IngresoItemDao) {
         ingresoItemDao.insert(item)
     }
 
+    suspend fun delete(item: IngresoItemEntity) = withContext(Dispatchers.IO) {
+        ingresoItemDao.delete(item)
+    }
+
     suspend fun getItemsByDate(date: Long): List<IngresoItemEntity> = withContext(Dispatchers.IO) {
         ingresoItemDao.getItemsByDate(date)
     }
+
+    suspend fun getItemsByCategory(category: String): List<IngresoItemEntity> = withContext(Dispatchers.IO) {
+        ingresoItemDao.getItemsByCategory(category)
+    }
+
     suspend fun getTotalIngresos(): Double = withContext(Dispatchers.IO) {
         ingresoItemDao.getTotalIngresos()
     }

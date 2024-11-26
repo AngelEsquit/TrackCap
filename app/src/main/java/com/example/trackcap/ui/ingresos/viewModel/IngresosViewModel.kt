@@ -19,6 +19,12 @@ class IngresosViewModel(private val ingresosRepository: IngresosRepository) : Vi
     private val _ingresosCategories = MutableLiveData<List<Pair<String, Float>>>()
     val ingresosCategories: LiveData<List<Pair<String, Float>>> = _ingresosCategories
 
+    private val _ingresosByCategory = MutableLiveData<List<IngresoItemEntity>>()
+    val ingresosByCategory: LiveData<List<IngresoItemEntity>> = _ingresosByCategory
+
+    private val _selectedCategory = MutableLiveData<String>()
+    val selectedCategory: LiveData<String> = _selectedCategory
+
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
@@ -48,6 +54,16 @@ class IngresosViewModel(private val ingresosRepository: IngresosRepository) : Vi
         }
     }
 
+    fun deleteItem(item: IngresoItemEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                ingresosRepository.delete(item)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
     fun getItemsByDate(date: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -55,6 +71,17 @@ class IngresosViewModel(private val ingresosRepository: IngresosRepository) : Vi
                     .groupBy { it.category }
                     .map { Pair(it.key, it.value.sumOf { item -> item.amount }.toFloat()) }
                 _ingresosCategories.postValue(items)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun getItemsByCategory(category: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val items = ingresosRepository.getItemsByCategory(category)
+                _ingresosByCategory.postValue(items)
             } catch (e: Exception) {
                 handleException(e)
             }

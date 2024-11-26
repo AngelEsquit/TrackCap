@@ -1,6 +1,7 @@
 package com.example.trackcap.database.movimientos.ingresos
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -16,21 +17,17 @@ interface IngresoItemDao {
     @Update
     suspend fun update(item: IngresoItemEntity)
 
+    @Delete
+    suspend fun delete(item: IngresoItemEntity)
+
     @Query("SELECT * FROM ingresos_items")
     fun getAllItems(): List<IngresoItemEntity>
 
     @Query("SELECT * FROM ingresos_items WHERE date >= :date")
     fun getItemsByDate(date: Long): List<IngresoItemEntity>
-    /*
-    @Query("DELETE FROM supermarket_items WHERE imagePath = :imagePath")
-    suspend fun delete(imagePath: String)
 
-    @Query("SELECT * FROM supermarket_items")
-    fun getAllItems(): List<SupermarketItemEntity>
-
-    @Query("SELECT * FROM supermarket_items WHERE itemName = :itemName AND quantity = :quantity AND imagePath = :imagePath")
-    fun getItemByAtributes(itemName: String, quantity: String, imagePath: String): SupermarketItemEntity
-     */
+    @Query("SELECT * FROM ingresos_items WHERE category = :category")
+    fun getItemsByCategory(category: String): List<IngresoItemEntity>
 
     @Query("SELECT SUM(amount) FROM ingresos_items")
     fun getTotalIngresos(): Double
