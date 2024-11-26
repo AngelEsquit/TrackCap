@@ -12,7 +12,8 @@ import kotlinx.coroutines.launch
 data class Investment(
     val name: String,
     val originalAmount: Double,
-    var currentAmount: Double
+    var currentAmount: Double,
+    val quantity: Double
 )
 
 class InvestViewModel(private val repository: InvestRepository) : ViewModel() {
@@ -29,7 +30,7 @@ class InvestViewModel(private val repository: InvestRepository) : ViewModel() {
     private fun loadInvestments() {
         viewModelScope.launch {
             val investmentsFromDb = repository.getAllInvestments().map {
-                Investment(it.name, it.price, 0.0)
+                Investment(it.name, it.price, 0.0, it.quantity)
             }
             _investments.value = investmentsFromDb
         }
@@ -43,22 +44,21 @@ class InvestViewModel(private val repository: InvestRepository) : ViewModel() {
 
     fun addInvestment(investment: Investment) {
         viewModelScope.launch {
-            repository.insertInvestment(ActivoItemEntity(name = investment.name, price = investment.originalAmount, quantity = 1.0))
+            repository.insertInvestment(ActivoItemEntity(name = investment.name, price = investment.originalAmount, quantity = investment.quantity))
             _investments.value = _investments.value + investment
         }
     }
 
     fun fetchCurrentAmount(investment: Investment) {
         viewModelScope.launch {
-            repository.fetchCurrentAmount(investment.name) { currentAmountInGTQ ->
+            repository.fetchCurrentAmount(investment.name) { currentPriceInUSD ->
                 val updatedInvestments = _investments.value.map {
-                    if (it.name == investment.name) it.copy(currentAmount = currentAmountInGTQ * it.originalAmount) else it
+                    if (it.name == investment.name) it.copy(currentAmount = currentPriceInUSD * it.quantity) else it
                 }
                 _investments.value = updatedInvestments
             }
         }
     }
-
 }
 
 class InvestViewModelFactory(private val repository: InvestRepository) : ViewModelProvider.Factory {

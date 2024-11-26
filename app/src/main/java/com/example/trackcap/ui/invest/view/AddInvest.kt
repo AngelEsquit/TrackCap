@@ -3,10 +3,14 @@ package com.example.trackcap.ui.invest.view
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,7 +30,10 @@ fun AddInvestScreen(
 ) {
     var investmentName by remember { mutableStateOf("") }
     var originalAmount by remember { mutableStateOf("") }
+    var quantity by remember { mutableStateOf("") }
     val suggestions by viewModel.suggestions.collectAsState()
+
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
         topBar = { AppBarTop(title = "Añadir activo", navController = navController) },
@@ -47,7 +54,11 @@ fun AddInvestScreen(
                     },
                     label = { Text("Nombre del activo") },
                     placeholder = { Text("Escribe aquí...") },
-                    singleLine = true
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    )
                 )
                 suggestions.forEach { suggestion ->
                     Text(
@@ -67,9 +78,26 @@ fun AddInvestScreen(
                 TextField(
                     value = originalAmount,
                     onValueChange = { originalAmount = it },
-                    label = { Text("Monto original") },
+                    label = { Text("Monto original (USD)") },
                     placeholder = { Text("Escribe aquí...") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    singleLine = true
+                )
+            }
+
+            item {
+                TextField(
+                    value = quantity,
+                    onValueChange = { quantity = it },
+                    label = { Text("Cantidad de activo") },
+                    placeholder = { Text("Escribe aquí...") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() }
+                    ),
                     singleLine = true
                 )
             }
@@ -77,7 +105,7 @@ fun AddInvestScreen(
             item {
                 Button(
                     onClick = {
-                        val investment = Investment(investmentName, originalAmount.toDouble(), 0.0)
+                        val investment = Investment(investmentName, originalAmount.toDouble(), 0.0, quantity.toDouble())
                         viewModel.addInvestment(investment)
                         navController.popBackStack()
                     },

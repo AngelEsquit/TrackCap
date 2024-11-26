@@ -4,13 +4,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://www.alphavantage.co/"
+    private const val BASE_URL = "https://api.twelvedata.com/"
 
-    val instance: AlphaVantageService by lazy {
+    val instance: TwelveDataService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(AlphaVantageService::class.java)
+            .create(TwelveDataService::class.java)
     }
 }

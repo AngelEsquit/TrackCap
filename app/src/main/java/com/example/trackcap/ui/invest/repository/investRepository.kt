@@ -1,12 +1,10 @@
 package com.example.trackcap.ui.invest.repository
 
-import com.example.trackcap.BuildConfig
 import com.example.trackcap.database.invest.ActivoItemDao
 import com.example.trackcap.database.invest.ActivoItemEntity
 import com.example.trackcap.networking.RetrofitClient
-import com.example.trackcap.networking.response.ExchangeRateResponse
-import com.example.trackcap.networking.response.SearchResponse
-import com.example.trackcap.networking.response.StockResponse
+import com.example.trackcap.networking.response.TwelveDataSearchResponse
+import com.example.trackcap.networking.response.TwelveDataStockResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -26,62 +24,35 @@ class InvestRepository(private val activoItemDao: ActivoItemDao) {
             activoItemDao.getAllItems()
         }
     }
+
     fun fetchCurrentAmount(symbol: String, onResult: (Double) -> Unit) {
         val call = RetrofitClient.instance.getStockData(
-            "TIME_SERIES_INTRADAY",
             symbol,
-            "YOUR_API_KEY"
+            "1min",
+            "d9eb2203d216430b874c7505fe576f10"
         )
 
-        call.enqueue(object : Callback<StockResponse> {
-            override fun onResponse(call: Call<StockResponse>, response: Response<StockResponse>) {
+        call.enqueue(object : Callback<TwelveDataStockResponse> {
+            override fun onResponse(call: Call<TwelveDataStockResponse>, response: Response<TwelveDataStockResponse>) {
                 if (response.isSuccessful) {
-                    val stockData = response.body()?.timeSeries?.values?.firstOrNull()
+                    val stockData = response.body()?.timeSeries?.firstOrNull()
                     val priceInUSD = stockData?.close?.toDoubleOrNull() ?: 0.0
-
-                    // Fetch USD to GTQ exchange rate
-                    fetchUsdToGqtRate { exchangeRate ->
-                        val priceInGTQ = priceInUSD * exchangeRate
-                        onResult(priceInGTQ)
-                    }
+                    onResult(priceInUSD)
                 } else {
                     onResult(0.0)
                 }
             }
 
-            override fun onFailure(call: Call<StockResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TwelveDataStockResponse>, t: Throwable) {
                 onResult(0.0)
             }
         })
     }
-
-    private fun fetchUsdToGqtRate(onResult: (Double) -> Unit) {
-        val call = RetrofitClient.instance.getExchangeRate("USD", "GTQ", "67XH0LBJTJNCNU82")
-
-        call.enqueue(object : Callback<ExchangeRateResponse> {
-            override fun onResponse(
-                call: Call<ExchangeRateResponse>,
-                response: Response<ExchangeRateResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val rate = response.body()?.realtimeRate?.rate?.toDoubleOrNull() ?: 0.0
-                    onResult(rate)
-                } else {
-                    onResult(0.0)
-                }
-            }
-
-            override fun onFailure(call: Call<ExchangeRateResponse>, t: Throwable) {
-                onResult(0.0)
-            }
-        })
-    }
-
 
     fun searchInvestments(query: String, onResult: (List<String>) -> Unit) {
-        val call = RetrofitClient.instance.searchInvestments("SYMBOL_SEARCH", query, BuildConfig.ALPHA_VANTAGE_API_KEY)
-        call.enqueue(object : Callback<SearchResponse> {
-            override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
+        val call = RetrofitClient.instance.searchInvestments(query, "d9eb2203d216430b874c7505fe576f10")
+        call.enqueue(object : Callback<TwelveDataSearchResponse> {
+            override fun onResponse(call: Call<TwelveDataSearchResponse>, response: Response<TwelveDataSearchResponse>) {
                 if (response.isSuccessful) {
                     val results = response.body()?.bestMatches?.map { it.symbol } ?: emptyList()
                     onResult(results)
@@ -90,7 +61,7 @@ class InvestRepository(private val activoItemDao: ActivoItemDao) {
                 }
             }
 
-            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TwelveDataSearchResponse>, t: Throwable) {
                 onResult(emptyList())
             }
         })

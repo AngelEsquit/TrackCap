@@ -51,29 +51,6 @@ fun InvestScreen(
             }
 
             item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Column(modifier = Modifier.wrapContentSize(Alignment.Center)) {
-                        Text(
-                            text = "Saldo",
-                            fontSize = 35.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                        Text(
-                            text = "Q " + "%.2f".format(investments.sumOf { it.currentAmount }),
-                            fontSize = 28.sp,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-                    }
-                }
-            }
-
-            item {
                 Row {
                     Text(
                         text = "Activos",
@@ -146,7 +123,7 @@ fun InvestScreen(
                                         .weight(1f)
                                 )
                                 Text(
-                                    text = "Q " + "%.2f".format(investment.originalAmount),
+                                    text = "$ " + "%.2f".format(investment.originalAmount),
                                     fontSize = 16.sp,
                                     color = Color.Black,
                                     modifier = Modifier
@@ -154,7 +131,7 @@ fun InvestScreen(
                                         .weight(1f)
                                 )
                                 Text(
-                                    text = "Q " + "%.2f".format(investment.currentAmount),
+                                    text = "$ " + "%.2f".format(investment.currentAmount),
                                     fontSize = 16.sp,
                                     color = Color.Black,
                                     modifier = Modifier
@@ -167,11 +144,13 @@ fun InvestScreen(
                                     change < 0 -> R.drawable.ic_arrow_down
                                     else -> R.drawable.ic_arrow_right
                                 }
+                                val iconSize = if (changeIcon == R.drawable.ic_arrow_right) 16.dp else 24.dp
                                 Image(
                                     painter = painterResource(id = changeIcon),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .padding(8.dp)
+                                        .size(iconSize)
                                         .weight(1f)
                                 )
                             }
